@@ -28,15 +28,6 @@ spring:
         ddl-auto: none
         format_sql: true
 
-logging:
-  level:
-    com:
-      netflix:
-        discovery: WARN
-        config:
-          sources:
-            URLConfigurationSource: ERROR
-
 snowflake:
   data-center-id: 0
   worker-id: 2
