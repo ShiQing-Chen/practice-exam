@@ -1,0 +1,48 @@
+
+server:
+  port: 9001
+
+spring:
+  application:
+    name: practice-exam
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/practice_exam?useUnicode=true&autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: ucenter
+    password: n738g81b@Ecourse4321
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      pool-name: cloud-ucenter
+      connection-timeout: 60000
+      maximum-pool-size: 10
+      connection-init-sql: SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    properties:
+      hibernate:
+        ddl-auto: none
+        format_sql: true
+
+logging:
+  level:
+    com:
+      netflix:
+        discovery: WARN
+        config:
+          sources:
+            URLConfigurationSource: ERROR
+
+snowflake:
+  data-center-id: 0
+  worker-id: 2
+
+jwt:
+  secretKey: practice123exam
+
+
+
