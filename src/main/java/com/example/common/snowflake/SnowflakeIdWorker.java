@@ -194,32 +194,5 @@ public class SnowflakeIdWorker {
         return System.currentTimeMillis();
     }
 
-    //==============================Test=============================================
-    /**
-     * 测试
-     */
-    public static void main(String[] args) {
-        long startTime = DateTime.parse("2019-07-12").getMillis();
-        LOGGER.debug("START_TIME:{}", startTime);
-        SnowflakeIdWorker.init(0,0);
-        final SnowflakeIdWorker idWorker = SnowflakeIdWorker.getInstance();
-        for(int i=0;i<1000;i++){
-            long id = idWorker.nextId();
-            LOGGER.debug("二进制:{}-十进制:{}",Long.toBinaryString(id),id);
-        }
-//        Long maxValue = Long.MAX_VALUE;
-//        LOGGER.debug("id差值长度:{}", maxValue);
-//        String maxValueStr = Long.toBinaryString(maxValue);
-//        String vaule64  = maxValueStr;
-//        for (int i = 0; i < 64 - maxValueStr.length(); i++) {
-//            vaule64 = "0" + vaule64;
-//        }
-//        LOGGER.debug("补充完的64位二进制:{}", vaule64);
-//        String vaule41 = vaule64.substring(1,42);
-//        LOGGER.debug("vaule41:{}", vaule41);
-//        LOGGER.debug("vaule41.length:{}", vaule41.length());
-//        Long tim = Long.valueOf(vaule41, 2);
-//        LOGGER.debug("时间戳差值:{}", tim);
-//        LOGGER.debug("时间天:{}", tim/(1000 * 60 * 60 * 24));
-    }
+
 }
