@@ -65,9 +65,7 @@ CREATE TABLE `class_info` (
   `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`class_id`),
-  UNIQUE KEY `uk_user_id` (`user_id`),
-  UNIQUE KEY `uk_student_number` (`student_number`)
+  PRIMARY KEY (`class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '班级信息表';
 
 DROP TABLE IF EXISTS `course_info`;
@@ -100,6 +98,8 @@ CREATE TABLE `notice_info` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`notice_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '通知专栏表';
+
+DROP TABLE IF EXISTS `material_info`;
 
 CREATE TABLE `material_info` (
   `material_id` bigint(20) NOT NULL COMMENT 'ID',
