@@ -9,7 +9,7 @@ CREATE TABLE `user_info` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `login_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '登录账户',
   `login_pass` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '加密密码',
-  `nick_name` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '昵称',
+  `nick_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '昵称',
   `avatar` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '头像地址',
   `user_type` smallint(6) DEFAULT NULL COMMENT '用户类型:1管理员，2教师，3学生',
   `gender` smallint(6) DEFAULT NULL COMMENT '性别:1男，2女',
@@ -46,7 +46,7 @@ CREATE TABLE `student_info` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `student_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '学生学号',
   `student_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '学生姓名',
-  `class_id` bigint(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '班级id',
+  `class_id` bigint(20) NOT NULL COMMENT '班级id',
   `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
@@ -61,7 +61,7 @@ CREATE TABLE `class_info` (
   `class_id` bigint(20) NOT NULL COMMENT '班级ID',
   `grade` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '年级',
   `major_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '专业',
-  `class_name` bigint(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '班级名称',
+  `class_name` bigint(20) DEFAULT NULL COMMENT '班级名称',
   `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
@@ -86,7 +86,7 @@ CREATE TABLE `course_info` (
 DROP TABLE IF EXISTS `notice_info`;
 
 CREATE TABLE `notice_info` (
-  `notice_id` bigint(20) NOT NULL COMMENT 'ID',
+  `notice_id` bigint(20) NOT NULL COMMENT '通知ID',
   `main_title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '主标题',
   `sub_title` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '副标题',
   `notice_content` varchar(1500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '通知内容',
@@ -102,7 +102,7 @@ CREATE TABLE `notice_info` (
 DROP TABLE IF EXISTS `material_info`;
 
 CREATE TABLE `material_info` (
-  `material_id` bigint(20) NOT NULL COMMENT 'ID',
+  `material_id` bigint(20) NOT NULL COMMENT '资料ID',
   `main_title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '主标题',
   `sub_title` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '副标题',
   `material_content` varchar(1500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '资料内容',
@@ -114,3 +114,29 @@ CREATE TABLE `material_info` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`material_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '资料信息表';
+
+DROP TABLE IF EXISTS `article_info`;
+
+CREATE TABLE `article_info` (
+  `article_id` bigint(20) NOT NULL COMMENT '帖子ID',
+  `article_title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '帖子标题',
+  `article_content` varchar(1500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '帖子内容',
+  `article_type` smallint(6) DEFAULT NULL COMMENT '帖子类型',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`article_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '帖子信息表';
+
+DROP TABLE IF EXISTS `article_comment`;
+
+CREATE TABLE `article_comment` (
+  `comment_id` bigint(20) NOT NULL COMMENT '评论ID',
+  `article_id` bigint(20) NOT NULL COMMENT '帖子ID',
+  `comment_content` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '帖子内容',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_user_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建用户名称',
+  `create_user_avatar` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建用户头像',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `order_number` int(11) DEFAULT NULL COMMENT '评论序号',
+  PRIMARY KEY (`comment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '帖子评论信息表';
