@@ -101,7 +101,7 @@
     </dependencies>
 
     <build>
-        <finalName>cloud-ucenter</finalName>
+        <finalName>practice-exam</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

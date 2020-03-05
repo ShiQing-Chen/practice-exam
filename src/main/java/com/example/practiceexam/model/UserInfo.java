@@ -94,6 +94,10 @@ public class UserInfo {
      * 更新时间
      */
     private Date updateTime;
+    /**
+     * 最后登录时间
+     */
+    private Date lastLoginTime;
 
     public Long getUserId() {
         return userId;
@@ -189,5 +193,13 @@ public class UserInfo {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 }

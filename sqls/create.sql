@@ -18,6 +18,7 @@ CREATE TABLE `user_info` (
   `refresh_token` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '刷新token',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最后登录时间',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uk_login_name` (`login_name`),
   UNIQUE KEY `uk_mobile` (`mobile`),

@@ -1,17 +1,32 @@
-package com.example.common.cache;
+package com.example.practiceexam.vo;
 
 import com.google.common.collect.Sets;
 
 import java.util.Set;
 
 /**
- * 共享用户用的，存放在redis/全局变量 中的用户对象<br/>
- */
-public class SharedUser {
-
+ * @author ShiQing_Chen  2020/3/5  19:52
+ **/
+public class ApiUserInfoVo {
+    /**
+     * 用户ID
+     */
     private Long userId;
+    /**
+     * 用户昵称
+     */
     private String nickName;
+    /**
+     * 用户类型
+     */
     private Integer userType;
+    /**
+     * 头像地址
+     */
+    private String avatar;
+    /**
+     * 用户角色编码
+     */
     private Set<String> roleCodes = Sets.newHashSet();
 
     public Long getUserId() {
