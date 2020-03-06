@@ -9,11 +9,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @author HanHongmin
- * @since 0.0.1
- *
- */
 public class DateTimeSerializer extends JsonSerializer<Date> {
 
 	@Override
