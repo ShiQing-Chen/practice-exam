@@ -1,63 +1,19 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 基础用户表
- * @author ShiQing_Chen  2020/3/4  22:41
+ * @author ShiQing_Chen  2020/3/7  00:19
  **/
-@Entity
-@Table(name = "user_info")
-public class UserInfo {
-    /**
-     * 用户类型 1管理员
-     */
-    public static final int TYPE_ADMIN = 1;
-    /**
-     * 用户类型 2教师
-     */
-    public static final int TYPE_TEACHER = 2;
-    /**
-     * 用户类型 3学生
-     */
-    public static final int TYPE_STUDENT = 3;
-
-    /**
-     * 性别 1男
-     */
-    public static final int GENDER_MALE = 1;
-    /**
-     * 性别 2女
-     */
-    public static final int GENDER_FEMALE = 2;
-
-    /**
-     * 用户状态 0禁用
-     */
-    public static final int STATUS_NOT_ACTIVE = 0;
-    /**
-     * 用户状态 1正常
-     */
-    public static final int STATUS_ACTIVED = 1;
-
-    public static final String AVATAR_DEFAULT = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3173584241,3533290860&fm=26&gp=0.jpg";
-
+public class UserDto {
     /**
      * 用户id
      */
-    @Id
     private Long userId;
     /**
      * 登录账户，唯一
      */
     private String loginName;
-    /**
-     * 加密密码
-     */
-    private String loginPass;
     /**
      * 昵称
      */
@@ -65,7 +21,7 @@ public class UserInfo {
     /**
      * 头像地址
      */
-    private String avatar = AVATAR_DEFAULT;
+    private String avatar;
     /**
      * 用户类型:1管理员，2教师，3学生
      */
@@ -81,11 +37,7 @@ public class UserInfo {
     /**
      * 状态0:未启用;1:已启用
      */
-    private Integer userStatus = STATUS_ACTIVED;
-    /**
-     * refreshToken 专有名词, 刷新token 用，唯一
-     */
-    private String refreshToken;
+    private Integer userStatus;
     /**
      * 创建时间
      */
@@ -113,14 +65,6 @@ public class UserInfo {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
-    }
-
-    public String getLoginPass() {
-        return loginPass;
-    }
-
-    public void setLoginPass(String loginPass) {
-        this.loginPass = loginPass;
     }
 
     public String getNickName() {
@@ -169,14 +113,6 @@ public class UserInfo {
 
     public void setUserStatus(Integer userStatus) {
         this.userStatus = userStatus;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public Date getCreateTime() {
