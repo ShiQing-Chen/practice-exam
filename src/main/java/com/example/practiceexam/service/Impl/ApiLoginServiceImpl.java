@@ -172,7 +172,7 @@ public class ApiLoginServiceImpl implements ApiLoginService {
         BeanUtils.copyProperties(userInfo.get(), apiUserInfoVo);
         //补充角色code
         Set<String> roles = RoleManager.getRoleByType(userInfo.get().getUserType());
-        sharedUser.setRoleCodes(roles);
+        apiUserInfoVo.setRoleCodes(roles);
         return MessageVo.success("成功", apiUserInfoVo);
     }
 

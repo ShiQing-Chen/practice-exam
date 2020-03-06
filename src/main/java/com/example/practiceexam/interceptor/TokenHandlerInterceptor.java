@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -51,32 +52,29 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) throws Exception {
-        response.setHeader("Access-Control-Allow-Origin","*");
-        response.setHeader("Access-Control-Allow-Headers","Origin, Accept, Content-Type, X-Requested-With");
-        response.setHeader("Access-Control-Allow-Methods","POST, GET, DELETE, OPTIONS, DELETE");
-
+        // 跨域
+        this.crossDomainConfig(response);
         //远程请求放行
-        if("OPTIONS".equals(request.getMethod())){
+        if ("OPTIONS".equals(request.getMethod())) {
             return true;
         }
-
-        String token = request.getHeader(TOKEN_IN_HEADER);
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isBlank(token)) {
             // 尚未登录 无效token
             ObjectMapper om = ObjectMapperFactory.getSimpleMapper();
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            MessageVo messageVo = new MessageVo(false,"没有token", MSG_401);
+            MessageVo messageVo = new MessageVo(false, "没有token", MSG_401);
             om.writeValue(response.getOutputStream(), messageVo);
             return false;
         }
         Long userId = JwtTokenUtils.getUserId(jwtSecretKey, token);
-        if(userId == null){
+        if (userId == null) {
             // 尚未登录 无效token
             ObjectMapper om = ObjectMapperFactory.getSimpleMapper();
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            MessageVo messageVo = new MessageVo(false,"没有token", MSG_401);
+            MessageVo messageVo = new MessageVo(false, "token失效", MSG_401);
             om.writeValue(response.getOutputStream(), messageVo);
             return false;
         }
@@ -88,11 +86,26 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
             ObjectMapper om = ObjectMapperFactory.getSimpleMapper();
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            MessageVo messageVo = new MessageVo(false,"没有token", MSG_401);
+            MessageVo messageVo = new MessageVo(false, "未登录", MSG_401);
             om.writeValue(response.getOutputStream(), messageVo);
             return false;
         }
         return true;
+    }
+
+    /**
+     * 配置跨域
+     * @param response
+     */
+    private void crossDomainConfig(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
+        response.setHeader("Access-Control-Expose-Headers", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Authentication,Origin, X-Requested-With, Content-Type, " + "Accept, x-access-token");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires ", "-1");
     }
 
 }

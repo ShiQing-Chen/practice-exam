@@ -8,7 +8,7 @@ public class OnlineUserManager {
     private static final ConcurrentHashMap<Long, SharedUser> USER_CLIENTS = new ConcurrentHashMap<Long, SharedUser>();
 
     public static boolean addUserClient(Long userId, SharedUser sharedUser) {
-        if (userId == null || sharedUser != null) {
+        if (userId == null || sharedUser == null) {
             return false;
         }
         USER_CLIENTS.put(userId, sharedUser);
@@ -16,7 +16,7 @@ public class OnlineUserManager {
     }
 
     public static boolean removeUserClient(Long userId, SharedUser sharedUser) {
-        if (userId == null || sharedUser != null) {
+        if (userId == null || sharedUser == null) {
             return false;
         }
         USER_CLIENTS.remove(userId, sharedUser);

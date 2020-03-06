@@ -53,6 +53,14 @@ public class ApiUserInfoVo {
         this.userType = userType;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public Set<String> getRoleCodes() {
         return roleCodes;
     }
