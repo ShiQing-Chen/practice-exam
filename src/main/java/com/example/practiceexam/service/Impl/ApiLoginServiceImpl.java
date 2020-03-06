@@ -17,7 +17,7 @@ import org.joda.time.PeriodType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +38,8 @@ public class ApiLoginServiceImpl implements ApiLoginService {
 
     @Autowired
     private UserInfoDao userInfoDao;
-//    @Autowired
-//    private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Value("${jwt.secretKey}")
     private String jwtSecretKey;
@@ -63,10 +63,10 @@ public class ApiLoginServiceImpl implements ApiLoginService {
         if (!user.getUserStatus().equals(UserInfo.STATUS_ACTIVED)) {
             return new MessageVo(false, "帐号状态异常，未激活或已被冻结");
         }
-//        //用户名密码不匹配
-//        if (!passwordEncoder.matches(password, user.getLoginPass())) {
-//            return new MessageVo(false, "用户名或密码不正确");
-//        }
+        //用户名密码不匹配
+        if (!passwordEncoder.matches(password, user.getLoginPass())) {
+            return new MessageVo(false, "用户名或密码不正确");
+        }
 
         //成功的逻辑
         Date now = new Date();

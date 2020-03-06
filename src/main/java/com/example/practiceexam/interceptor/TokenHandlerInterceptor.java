@@ -37,7 +37,7 @@ public class TokenHandlerInterceptor extends HandlerInterceptorAdapter {
      */
     public static final ImmutableList<String> URL_EXCLUDE_LIST = ImmutableList.of(
             "/api/user/refreshToken",
-            "/api1/user/login"
+            "/api/user/login"
     );
 
     /**
