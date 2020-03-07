@@ -1,22 +1,14 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 班级信息表
- * @author ShiQing_Chen  2020/3/5  00:22
+ * @author ShiQing_Chen  2020/3/7  15:14
  **/
-@Entity
-@Table(name = "class_info")
-public class ClassInfo {
-    public final static int ZERO = 0;
+public class ClassDto {
     /**
      * 班级id
      */
-    @Id
     private Long classId;
     /**
      * 年级 例2019 2020
@@ -35,9 +27,13 @@ public class ClassInfo {
      */
     private Long teacherId;
     /**
+     * 教师名称
+     */
+    private String teacherName;
+    /**
      * 学生数量
      */
-    private Integer studentNum = ZERO;
+    private Integer studentNum;
     /**
      * 创建用户id
      */
@@ -89,6 +85,14 @@ public class ClassInfo {
 
     public void setTeacherId(Long teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     public Integer getStudentNum() {

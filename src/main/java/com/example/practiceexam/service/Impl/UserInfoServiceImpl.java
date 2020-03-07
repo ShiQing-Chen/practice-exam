@@ -317,6 +317,5 @@ public class UserInfoServiceImpl implements UserInfoService {
         } else {
             return MessageVo.success(Lists.newArrayList());
         }
-
     }
 }

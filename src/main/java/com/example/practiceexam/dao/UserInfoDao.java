@@ -41,7 +41,7 @@ public interface UserInfoDao extends JpaRepository<UserInfo, Long>, UserInfoDaoC
      * @return
      */
     @Modifying
-    @Query(value = "delete from user_info u where u.user_id = ?1 ", nativeQuery = true)
+    @Query(value = "delete from user_info where user_id = ?1 ", nativeQuery = true)
     int delById(Long userId);
 
     /**
