@@ -50,6 +50,14 @@ public class StudentDto {
      * 用户手机号码，唯一
      */
     private String mobile;
+    /**
+     * 年级 例2019 2020
+     */
+    private String grade;
+    /**
+     * 专业
+     */
+    private String majorName;
 
     public Long getStudentId() {
         return studentId;
@@ -137,5 +145,21 @@ public class StudentDto {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getMajorName() {
+        return majorName;
+    }
+
+    public void setMajorName(String majorName) {
+        this.majorName = majorName;
     }
 }

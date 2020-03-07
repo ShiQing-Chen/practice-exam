@@ -41,7 +41,7 @@ public class TeacherInfoController {
             return MessageVo.fail("获取教师数据失败！");
         }
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return teacherInfoService.classGetListByPage(param);
     }

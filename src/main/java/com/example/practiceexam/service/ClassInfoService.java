@@ -60,4 +60,10 @@ public interface ClassInfoService {
      * @return
      */
     MessageVo setClassTeacher(Long classId, Long teacherId);
+
+    /**
+     * 获取专业名称列表、班级名称列表
+     * @return
+     */
+    MessageVo getListClassAndMajor();
 }

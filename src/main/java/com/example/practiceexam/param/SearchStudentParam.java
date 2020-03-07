@@ -13,6 +13,9 @@ public class SearchStudentParam {
     private Integer limit;
     @Size(max = 20, message = "搜索内容长度不超过20个字符！")
     private String search;
+    private String grade;
+    private String majorName;
+    private String className;
     private Long classId;
 
     public String getSort() {
@@ -53,6 +56,30 @@ public class SearchStudentParam {
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getMajorName() {
+        return majorName;
+    }
+
+    public void setMajorName(String majorName) {
+        this.majorName = majorName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public Long getClassId() {

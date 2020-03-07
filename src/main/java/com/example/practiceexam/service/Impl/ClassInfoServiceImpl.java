@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -172,5 +173,26 @@ public class ClassInfoServiceImpl implements ClassInfoService {
             }
         }
         return MessageVo.fail("当前班级设置教师失败！");
+    }
+
+    /**
+     * 获取专业名称列表、班级名称列表
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getListClassAndMajor() {
+        List<String> classNameList = classInfoDao.getListClassName();
+        List<String> majorNameList = classInfoDao.getListMajorName();
+        Map<String, Object> map = Maps.newHashMap();
+        if (CollectionUtils.isEmpty(classNameList)) {
+            classNameList = Lists.newArrayList();
+        }
+        if (CollectionUtils.isEmpty(majorNameList)) {
+            majorNameList = Lists.newArrayList();
+        }
+        map.put("classNameList", classNameList);
+        map.put("majorNameList", majorNameList);
+        return MessageVo.success(map);
     }
 }

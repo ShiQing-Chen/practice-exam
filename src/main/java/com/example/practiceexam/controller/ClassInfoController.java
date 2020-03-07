@@ -41,7 +41,7 @@ public class ClassInfoController {
     @ResponseBody
     public MessageVo add(SharedUser sharedUser, @RequestBody @Valid AddClassForm classForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return classInfoService.add(sharedUser, classForm);
     }
@@ -56,7 +56,7 @@ public class ClassInfoController {
     @ResponseBody
     public MessageVo update(SharedUser sharedUser, @RequestBody @Valid UpdateClassForm classForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return classInfoService.update(sharedUser, classForm);
     }
@@ -102,7 +102,7 @@ public class ClassInfoController {
             return MessageVo.fail("获取班级数据失败！");
         }
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return classInfoService.adminGetListByPage(classParam);
     }
@@ -134,6 +134,17 @@ public class ClassInfoController {
             return MessageVo.fail("缺少班级ID或教师参数！");
         }
         return classInfoService.setClassTeacher(classId, teacherId);
+    }
+
+
+    /**
+     * 获取专业名称列表、班级名称列表
+     * @return
+     */
+    @RequestMapping(value = "/class/getListClassAndMajor", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getListClassAndMajor() {
+        return classInfoService.getListClassAndMajor();
     }
 
 }

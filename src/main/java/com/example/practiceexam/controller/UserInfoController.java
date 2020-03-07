@@ -41,7 +41,7 @@ public class UserInfoController {
     @ResponseBody
     public MessageVo add(SharedUser sharedUser, @RequestBody @Valid AddUserForm userForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return userInfoService.add(sharedUser, userForm);
     }
@@ -56,7 +56,7 @@ public class UserInfoController {
     @ResponseBody
     public MessageVo update(SharedUser sharedUser, @RequestBody @Valid UpdateUserForm userForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return userInfoService.update(sharedUser, userForm);
     }
@@ -223,7 +223,7 @@ public class UserInfoController {
             return MessageVo.fail("获取用户数据失败！");
         }
         if (bindingResult.hasErrors()) {
-            return MessageVo.fail("表单验证失败！", BindingResultUtils.getErrorString(bindingResult));
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return userInfoService.adminGetListByPage(userParam);
     }

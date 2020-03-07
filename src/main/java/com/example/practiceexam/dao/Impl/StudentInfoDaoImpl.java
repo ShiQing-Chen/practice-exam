@@ -37,7 +37,7 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         StringBuilder sqlSb = new StringBuilder();
         sqlSb.append(" select s.student_id studentId, s.user_id userId, s.student_number studentNumber, ");
         sqlSb.append(" s.student_name studentName, s.class_id classId, c.class_name className, s.create_time createTime, ");
-        sqlSb.append(" u.avatar avatar, u.user_type userType, u.gender gender, u.mobile mobile ");
+        sqlSb.append(" u.avatar avatar, u.user_type userType, u.gender gender, u.mobile mobile, c.grade grade, c.major_name majorName ");
         sqlSb.append(" from student_info s left join user_info u on s.user_id=u.user_id ");
         sqlSb.append(" left join class_info c on s.class_id = c.class_id ");
         sqlSb.append(" where 1=1 ");
@@ -50,6 +50,18 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         if (StringUtils.isNotEmpty(param.getSearch())) {
             sqlSb.append(" AND (s.student_number LIKE :search or s.student_name LIKE :search or u.mobile LIKE :search) ");
             paramMap.put("search", "%" + param.getSearch() + "%");
+        }
+        if (StringUtils.isNotBlank(param.getGrade())) {
+            sqlSb.append(" AND c.grade = :grade ");
+            paramMap.put("grade", param.getGrade());
+        }
+        if (StringUtils.isNotBlank(param.getMajorName())) {
+            sqlSb.append(" AND c.major_name = :majorName ");
+            paramMap.put("majorName", param.getMajorName());
+        }
+        if (StringUtils.isNotBlank(param.getClassName())) {
+            sqlSb.append(" AND c.class_name = :className ");
+            paramMap.put("className", param.getClassName());
         }
         if ("desc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
             sqlSb.append(" order by ").append(param.getSort()).append(" desc");
@@ -68,7 +80,9 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
                 .addScalar("avatar", StandardBasicTypes.STRING)
                 .addScalar("userType", StandardBasicTypes.INTEGER)
                 .addScalar("gender", StandardBasicTypes.INTEGER)
-                .addScalar("mobile", StandardBasicTypes.STRING);
+                .addScalar("mobile", StandardBasicTypes.STRING)
+                .addScalar("grade", StandardBasicTypes.STRING)
+                .addScalar("majorName", StandardBasicTypes.STRING);
         if (!CollectionUtils.isEmpty(paramMap)) {
             for (Map.Entry<String, Object> m : paramMap.entrySet()) {
                 query.setParameter(m.getKey(), m.getValue());
@@ -100,6 +114,18 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         if (StringUtils.isNotEmpty(param.getSearch())) {
             sqlSb.append(" AND (s.student_number LIKE :search or s.student_name LIKE :search or u.mobile LIKE :search) ");
             paramMap.put("search", "%" + param.getSearch() + "%");
+        }
+        if (StringUtils.isNotBlank(param.getGrade())) {
+            sqlSb.append(" AND c.grade = :grade ");
+            paramMap.put("grade", param.getGrade());
+        }
+        if (StringUtils.isNotBlank(param.getMajorName())) {
+            sqlSb.append(" AND c.major_name = :majorName ");
+            paramMap.put("majorName", param.getMajorName());
+        }
+        if (StringUtils.isNotBlank(param.getClassName())) {
+            sqlSb.append(" AND c.class_name = :className ");
+            paramMap.put("className", param.getClassName());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());
