@@ -1,21 +1,14 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 学生信息表
- * @author ShiQing_Chen  2020/3/4  23:46
+ * @author ShiQing_Chen  2020/3/7  22:34
  **/
-@Entity
-@Table(name = "student_info")
-public class StudentInfo {
+public class StudentDto {
     /**
      * 学生id
      */
-    @Id
     private Long studentId;
     /**
      * 用户id
@@ -34,17 +27,29 @@ public class StudentInfo {
      */
     private Long classId;
     /**
-     * 创建用户id
+     * 班级名称
      */
-    private Long createUserId;
+    private String className;
     /**
      * 创建时间
      */
     private Date createTime;
     /**
-     * 更新时间
+     * 头像地址
      */
-    private Date updateTime;
+    private String avatar;
+    /**
+     * 用户类型:1管理员，2教师，3学生
+     */
+    private Integer userType;
+    /**
+     * 性别:1男，2女
+     */
+    private Integer gender;
+    /**
+     * 用户手机号码，唯一
+     */
+    private String mobile;
 
     public Long getStudentId() {
         return studentId;
@@ -86,12 +91,12 @@ public class StudentInfo {
         this.classId = classId;
     }
 
-    public Long getCreateUserId() {
-        return createUserId;
+    public String getClassName() {
+        return className;
     }
 
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public Date getCreateTime() {
@@ -102,11 +107,35 @@ public class StudentInfo {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

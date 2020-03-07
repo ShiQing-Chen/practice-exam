@@ -108,7 +108,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     /**
      * 重置用户密码
-     * 如果有手机号则重置为手机号，没有则重置为111111
+     * 重置为111111
      * @param userId
      * @return
      */
@@ -118,17 +118,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userId != null) {
             UserInfo update = userInfoDao.getById(userId);
             if (update != null) {
-                //如果手机号为null则密码重置为111111
-                String mess;
-                if (StringUtils.isNotBlank(update.getMobile())) {
-                    update.setLoginPass(passwordEncoder.encode(update.getMobile()));
-                    mess = "该用户密码重置成功！重置为手机号：" + update.getMobile();
-                } else {
-                    update.setLoginPass(passwordEncoder.encode("111111"));
-                    mess = "该用户密码重置成功！重置为：111111";
-                }
+                // 密码重置为111111
+                update.setLoginPass(passwordEncoder.encode("111111"));
                 userInfoDao.save(update);
-                return MessageVo.success(mess);
+                return MessageVo.success("该用户密码重置成功！重置为：111111");
             }
         }
         return MessageVo.fail("重置密码失败！");

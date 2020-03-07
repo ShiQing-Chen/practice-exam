@@ -63,7 +63,7 @@ public class UserInfoController {
 
     /**
      * 重置用户密码
-     * 如果有手机号则重置为手机号，没有则重置为111111
+     * 重置为111111
      * @param userId
      * @return
      */

@@ -1,21 +1,14 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 学生信息表
- * @author ShiQing_Chen  2020/3/4  23:46
+ * @author ShiQing_Chen  2020/3/7  22:34
  **/
-@Entity
-@Table(name = "student_info")
-public class StudentInfo {
+public class StudentInfoDto {
     /**
      * 学生id
      */
-    @Id
     private Long studentId;
     /**
      * 用户id
@@ -32,7 +25,7 @@ public class StudentInfo {
     /**
      * 班级ID
      */
-    private Long classId;
+    private String classId;
     /**
      * 创建用户id
      */
@@ -45,6 +38,23 @@ public class StudentInfo {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 头像地址
+     */
+    private String avatar;
+    /**
+     * 用户类型:1管理员，2教师，3学生
+     */
+    private Integer userType;
+    /**
+     * 性别:1男，2女
+     */
+    private Integer gender;
+    /**
+     * 用户手机号码，唯一
+     */
+    private String mobile;
 
     public Long getStudentId() {
         return studentId;
@@ -78,11 +88,11 @@ public class StudentInfo {
         this.studentName = studentName;
     }
 
-    public Long getClassId() {
+    public String getClassId() {
         return classId;
     }
 
-    public void setClassId(Long classId) {
+    public void setClassId(String classId) {
         this.classId = classId;
     }
 
@@ -108,5 +118,37 @@ public class StudentInfo {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }
