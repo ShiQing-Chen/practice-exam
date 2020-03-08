@@ -7,6 +7,7 @@ import com.example.practiceexam.form.AddStudentForm;
 import com.example.practiceexam.form.UpdateStudentForm;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.example.practiceexam.service.StudentInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -98,6 +99,9 @@ public class StudentInfoController {
     @RequestMapping(value = "/student/checkStudentNumber", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo checkStudentNumber(String studentNumber) {
+        if (StringUtils.isBlank(studentNumber)) {
+            return MessageVo.fail("校验失败，缺少学号参数！");
+        }
         return studentInfoService.checkStudentNumber(studentNumber);
     }
 
@@ -111,6 +115,9 @@ public class StudentInfoController {
     @RequestMapping(value = "/student/checkStudentNumberById", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo checkStudentNumberById(Long studentId, String studentNumber) {
+        if (studentId == null || StringUtils.isBlank(studentNumber)) {
+            return MessageVo.fail("校验失败，缺少学生ID或学号参数！");
+        }
         return studentInfoService.checkStudentNumberById(studentId, studentNumber);
     }
 

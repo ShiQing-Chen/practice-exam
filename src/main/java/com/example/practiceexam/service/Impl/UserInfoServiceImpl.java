@@ -215,6 +215,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public MessageVo checkMobile(String mobile) {
         if (StringUtils.isNotBlank(mobile)) {
             if (userInfoDao.checkMobile(mobile) == 0) {
@@ -231,6 +232,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public MessageVo checkMobileById(Long userId, String mobile) {
         if (StringUtils.isNotBlank(mobile) && userId != null) {
             if (userInfoDao.checkMobile(userId, mobile) == 0) {
@@ -247,6 +249,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public MessageVo checkLoginName(String loginName) {
         if (StringUtils.isNotBlank(loginName)) {
             if (userInfoDao.checkLoginName(loginName) == 0) {
@@ -264,6 +267,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public MessageVo checkLoginNameById(Long userId, String loginName) {
         if (StringUtils.isNotBlank(loginName) && userId != null) {
             if (userInfoDao.checkLoginName(userId, loginName) == 0) {
@@ -280,6 +284,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public MessageVo changeAvatar(Long userId, String avatar) {
         if (StringUtils.isNotBlank(avatar) && userId != null) {
             UserInfo update = userInfoDao.getById(userId);

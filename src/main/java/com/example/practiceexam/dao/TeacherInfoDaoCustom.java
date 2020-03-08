@@ -1,7 +1,9 @@
 package com.example.practiceexam.dao;
 
 import com.example.practiceexam.dto.ClassTeacherDto;
+import com.example.practiceexam.dto.TeacherDto;
 import com.example.practiceexam.param.SearchClassTeacherParam;
+import com.example.practiceexam.param.SearchTeacherParam;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,4 +31,18 @@ public interface TeacherInfoDaoCustom {
      * @return
      */
     Integer classGetCountByPage(SearchClassTeacherParam param);
+
+    /**
+     * 分页查询
+     * @param param
+     * @return
+     */
+    List<TeacherDto> getListByPage(SearchTeacherParam param);
+
+    /**
+     * 分页查询
+     * @param param
+     * @return
+     */
+    Integer getCountByPage(SearchTeacherParam param);
 }

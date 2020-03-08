@@ -7,6 +7,7 @@ import com.example.practiceexam.form.AddUserForm;
 import com.example.practiceexam.form.UpdateUserForm;
 import com.example.practiceexam.param.SearchUserParam;
 import com.example.practiceexam.service.UserInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -156,6 +157,9 @@ public class UserInfoController {
     @RequestMapping(value = "/user/checkMobile", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo checkMobile(String mobile) {
+        if (StringUtils.isBlank(mobile)) {
+            return MessageVo.fail("校验失败，缺少手机号参数！");
+        }
         return userInfoService.checkMobile(mobile);
     }
 
@@ -169,6 +173,9 @@ public class UserInfoController {
     @RequestMapping(value = "/user/checkMobileById", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo checkMobileById(Long userId, String mobile) {
+        if (userId == null || StringUtils.isBlank(mobile)) {
+            return MessageVo.fail("校验失败，缺少用户ID或手机号参数！");
+        }
         return userInfoService.checkMobileById(userId, mobile);
     }
 
@@ -182,6 +189,9 @@ public class UserInfoController {
     @RequestMapping(value = "/user/checkLoginName", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo checkLoginName(String loginName) {
+        if (StringUtils.isBlank(loginName)) {
+            return MessageVo.fail("校验失败，缺少登录账号参数！");
+        }
         return userInfoService.checkLoginName(loginName);
     }
 
@@ -195,6 +205,9 @@ public class UserInfoController {
     @RequestMapping(value = "/user/checkLoginNameById", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo checkLoginNameById(Long userId, String loginName) {
+        if (userId == null || StringUtils.isBlank(loginName)) {
+            return MessageVo.fail("校验失败，缺少用户ID或登录账号参数！");
+        }
         return userInfoService.checkLoginNameById(userId, loginName);
     }
 
@@ -207,6 +220,9 @@ public class UserInfoController {
     @RequestMapping(value = "/user/changeAvatar", method = RequestMethod.GET)
     @ResponseBody
     public MessageVo changeAvatar(Long userId, String avatar) {
+        if (userId == null || StringUtils.isBlank(avatar)) {
+            return MessageVo.fail("更换头像失败，缺少用户ID或头像地址参数！");
+        }
         return userInfoService.changeAvatar(userId, avatar);
     }
 
