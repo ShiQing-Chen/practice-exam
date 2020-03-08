@@ -1,5 +1,6 @@
 package com.example.practiceexam.updown;
 
+import com.example.common.alioss.AliOssConfig;
 import com.example.common.snowflake.SnowflakeIdWorker;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -30,6 +31,18 @@ public class StartupService implements InitializingBean {
     @Value("${snowflake.worker-id}")
     private Integer workerId;
 
+    @Value("${alioss.endpoint}")
+    private String endpoint;
+
+    @Value("${alioss.accessKeyId}")
+    private String accessKeyId;
+
+    @Value("${alioss.accessKeySecret}")
+    private String accessKeySecret;
+
+    @Value("${alioss.bucketName}")
+    private String bucketName;
+
     @Autowired
     public StartupService(Environment environment, BuildProperties buildProperties) {
         this.environment = environment;
@@ -51,5 +64,7 @@ public class StartupService implements InitializingBean {
 
         //初始化ID 生成器
         SnowflakeIdWorker.init(dataCenterId,workerId);
+        //初始化阿里云对象存储
+        AliOssConfig.init(endpoint, accessKeyId, accessKeySecret, bucketName);
     }
 }
