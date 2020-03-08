@@ -6,6 +6,7 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.ClassInfoDao;
 import com.example.practiceexam.dao.TeacherInfoDao;
 import com.example.practiceexam.dto.ClassDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.form.AddClassForm;
 import com.example.practiceexam.form.UpdateClassForm;
 import com.example.practiceexam.model.ClassInfo;
@@ -14,6 +15,7 @@ import com.example.practiceexam.param.SearchClassParam;
 import com.example.practiceexam.service.ClassInfoService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -194,5 +196,32 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         map.put("classNameList", classNameList);
         map.put("majorNameList", majorNameList);
         return MessageVo.success(map);
+    }
+
+    /**
+     * 远程模糊查询班级信息
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo searchListClassName(String search) {
+        if (StringUtils.isNotBlank(search)) {
+            List<ValueLabelDto> dtos = classInfoDao.searchListClassName(search);
+            return MessageVo.success(dtos);
+        }
+        return MessageVo.success(Lists.newArrayList());
+    }
+
+    /**
+     * 学生编辑初始化学生班级信息
+     * @return
+     */
+    @Override
+    public MessageVo initStudentClassById(Long classId) {
+        if (classId != null) {
+            List<ValueLabelDto> dtos = classInfoDao.initStudentClassById(classId);
+            return MessageVo.success(dtos);
+        }
+        return MessageVo.success(Lists.newArrayList());
     }
 }

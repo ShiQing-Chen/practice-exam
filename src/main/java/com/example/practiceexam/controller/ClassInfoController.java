@@ -7,6 +7,7 @@ import com.example.practiceexam.form.AddClassForm;
 import com.example.practiceexam.form.UpdateClassForm;
 import com.example.practiceexam.param.SearchClassParam;
 import com.example.practiceexam.service.ClassInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -147,4 +148,29 @@ public class ClassInfoController {
         return classInfoService.getListClassAndMajor();
     }
 
+    /**
+     * 远程模糊查询班级信息
+     * @return
+     */
+    @RequestMapping(value = "/class/searchListClassName", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo searchListClassName(String search) {
+        if (StringUtils.isBlank(search)) {
+            return MessageVo.fail("缺少搜索内容参数！");
+        }
+        return classInfoService.searchListClassName(search);
+    }
+
+    /**
+     * 学生编辑初始化学生班级信息
+     * @return
+     */
+    @RequestMapping(value = "/class/initStudentClassById", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo initStudentClassById(Long classId) {
+        if (classId == null) {
+            return MessageVo.fail("初始化学生班级信息失败，缺少班级ID参数！");
+        }
+        return classInfoService.initStudentClassById(classId);
+    }
 }

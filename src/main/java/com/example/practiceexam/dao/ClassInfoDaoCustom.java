@@ -1,6 +1,7 @@
 package com.example.practiceexam.dao;
 
 import com.example.practiceexam.dto.ClassDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.param.SearchClassParam;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,16 @@ public interface ClassInfoDaoCustom {
      * @return
      */
     Integer adminGetCountByPage(SearchClassParam classParam);
+
+    /**
+     * 模糊查询班级
+     * @return
+     */
+    List<ValueLabelDto> searchListClassName(String search);
+
+    /**
+     * 学生编辑初始化学生班级信息
+     * @return
+     */
+    List<ValueLabelDto> initStudentClassById(Long classId);
 }

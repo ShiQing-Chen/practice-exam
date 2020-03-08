@@ -66,4 +66,16 @@ public interface ClassInfoService {
      * @return
      */
     MessageVo getListClassAndMajor();
+
+    /**
+     * 远程模糊查询班级信息
+     * @return
+     */
+    MessageVo searchListClassName(String search);
+
+    /**
+     * 学生编辑初始化学生班级信息
+     * @return
+     */
+    MessageVo initStudentClassById(Long classId);
 }

@@ -25,7 +25,7 @@ public class StudentInfoDto {
     /**
      * 班级ID
      */
-    private String classId;
+    private Long classId;
     /**
      * 创建用户id
      */
@@ -88,11 +88,11 @@ public class StudentInfoDto {
         this.studentName = studentName;
     }
 
-    public String getClassId() {
+    public Long getClassId() {
         return classId;
     }
 
-    public void setClassId(String classId) {
+    public void setClassId(Long classId) {
         this.classId = classId;
     }
 
