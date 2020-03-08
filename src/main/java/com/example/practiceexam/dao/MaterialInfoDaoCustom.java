@@ -2,6 +2,7 @@ package com.example.practiceexam.dao;
 
 import com.example.practiceexam.dto.MaterialDto;
 import com.example.practiceexam.dto.MaterialInfoDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.param.SearchMaterialParam;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,10 @@ public interface MaterialInfoDaoCustom {
      * @return
      */
     MaterialInfoDto getInfoById(Long materialId);
+
+    /**
+     * 首页获取前5条
+     * @return
+     */
+    List<ValueLabelDto> indexGetList();
 }

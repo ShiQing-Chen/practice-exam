@@ -6,6 +6,7 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.MaterialInfoDao;
 import com.example.practiceexam.dto.MaterialDto;
 import com.example.practiceexam.dto.MaterialInfoDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.form.AddMaterialForm;
 import com.example.practiceexam.form.UpdateMaterialForm;
 import com.example.practiceexam.model.MaterialInfo;
@@ -17,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -168,5 +170,19 @@ public class MaterialInfoServiceImpl implements MaterialInfoService {
         } else {
             return MessageVo.success(Lists.newArrayList());
         }
+    }
+
+    /**
+     * 首页获取前五条下载资料
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo indexGetList() {
+        List<ValueLabelDto> list = materialInfoDao.indexGetList();
+        if (CollectionUtils.isEmpty(list)) {
+            return MessageVo.success(Lists.newArrayList());
+        }
+        return MessageVo.success(list);
     }
 }

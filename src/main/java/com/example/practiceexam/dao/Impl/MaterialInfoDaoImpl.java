@@ -3,6 +3,7 @@ package com.example.practiceexam.dao.Impl;
 import com.example.practiceexam.dao.MaterialInfoDaoCustom;
 import com.example.practiceexam.dto.MaterialDto;
 import com.example.practiceexam.dto.MaterialInfoDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.param.SearchMaterialParam;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -158,5 +159,23 @@ public class MaterialInfoDaoImpl implements MaterialInfoDaoCustom {
         query.setParameter("materialId", materialId);
         query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(MaterialInfoDto.class));
         return (MaterialInfoDto) query.uniqueResult();
+    }
+
+    /**
+     * 首页获取前5条
+     * @return
+     */
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public List<ValueLabelDto> indexGetList() {
+        Session session = entityManager.unwrap(Session.class);
+        NativeQuery query = session.createSQLQuery(
+                " select n.material_id value, n.main_title label from material_info n order by n.create_time desc ");
+        query.addScalar("value", StandardBasicTypes.LONG)
+                .addScalar("label", StandardBasicTypes.STRING);
+        query.setFirstResult(0);
+        query.setMaxResults(5);
+        query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(ValueLabelDto.class));
+        return query.list();
     }
 }

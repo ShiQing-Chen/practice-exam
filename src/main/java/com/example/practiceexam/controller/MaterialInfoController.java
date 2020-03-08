@@ -135,4 +135,15 @@ public class MaterialInfoController {
         }
         return materialInfoService.getListByPage(param);
     }
+
+
+    /**
+     * 首页获取前五条下载资料
+     * @return
+     */
+    @RequestMapping(value = "/material/indexGetList", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo indexGetList() {
+        return materialInfoService.indexGetList();
+    }
 }

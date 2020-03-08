@@ -59,4 +59,10 @@ public interface MaterialInfoService {
      * @return
      */
     MessageVo getListByPage(SearchMaterialParam param);
+
+    /**
+     * 首页获取前5条
+     * @return
+     */
+    MessageVo indexGetList();
 }
