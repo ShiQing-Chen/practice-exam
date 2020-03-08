@@ -1,29 +1,14 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 资料信息表
- * @author ShiQing_Chen  2020/3/5  00:48
+ * @author ShiQing_Chen  2020/3/8  19:35
  **/
-@Entity
-@Table(name = "material_info")
-public class MaterialInfo {
-    /**
-     * 草稿
-     */
-    public final static int STATUS_DRAFT = 1;
-    /**
-     * 发布
-     */
-    public final static int STATUS_PUBLIC = 2;
+public class MaterialInfoDto {
     /**
      * 资料id
      */
-    @Id
     private Long materialId;
     /**
      * 主标题
@@ -46,6 +31,10 @@ public class MaterialInfo {
      */
     private Long publishUserId;
     /**
+     * 发布用户姓名
+     */
+    private String publishUserName;
+    /**
      * 发布时间
      */
     private Date publishTime;
@@ -54,13 +43,13 @@ public class MaterialInfo {
      */
     private Long createUserId;
     /**
+     * 创建用户姓名
+     */
+    private String createUserName;
+    /**
      * 创建时间
      */
     private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 
     public Long getMaterialId() {
         return materialId;
@@ -110,6 +99,14 @@ public class MaterialInfo {
         this.publishUserId = publishUserId;
     }
 
+    public String getPublishUserName() {
+        return publishUserName;
+    }
+
+    public void setPublishUserName(String publishUserName) {
+        this.publishUserName = publishUserName;
+    }
+
     public Date getPublishTime() {
         return publishTime;
     }
@@ -126,19 +123,19 @@ public class MaterialInfo {
         this.createUserId = createUserId;
     }
 
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

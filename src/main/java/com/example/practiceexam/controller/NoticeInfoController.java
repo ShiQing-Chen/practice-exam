@@ -69,7 +69,7 @@ public class NoticeInfoController {
     @ResponseBody
     public MessageVo delById(Long noticeId) {
         if (noticeId == null) {
-            return MessageVo.fail("缺少教师ID参数！");
+            return MessageVo.fail("缺少通知ID参数！");
         }
         return noticeInfoService.delById(noticeId);
     }
@@ -83,7 +83,7 @@ public class NoticeInfoController {
     @ResponseBody
     public MessageVo getById(Long noticeId) {
         if (noticeId == null) {
-            return MessageVo.fail("缺少教师ID参数！");
+            return MessageVo.fail("缺少通知ID参数！");
         }
         return noticeInfoService.getById(noticeId);
     }
@@ -97,7 +97,7 @@ public class NoticeInfoController {
     @ResponseBody
     public MessageVo publicNotice(SharedUser sharedUser, Long noticeId) {
         if (noticeId == null) {
-            return MessageVo.fail("缺少教师ID参数！");
+            return MessageVo.fail("缺少通知ID参数！");
         }
         if (sharedUser == null) {
             return MessageVo.fail("请登录后重试");

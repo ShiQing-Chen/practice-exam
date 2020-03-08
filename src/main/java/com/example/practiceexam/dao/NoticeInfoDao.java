@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface NoticeInfoDao extends JpaRepository<NoticeInfo, Long>, NoticeInfoDaoCustom {
     /**
      * 根据id获取通知
-     * @param noticeId 班级ID
+     * @param noticeId 通知ID
      * @return
      */
     @Query(value = "select n.* from notice_info n where n.notice_id = ?1 ", nativeQuery = true)
