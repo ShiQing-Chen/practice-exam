@@ -1,29 +1,14 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 通知专栏表
- * @author ShiQing_Chen  2020/3/5  00:48
+ * @author ShiQing_Chen  2020/3/8  17:56
  **/
-@Entity
-@Table(name = "notice_info")
-public class NoticeInfo {
-    /**
-     * 草稿
-     */
-    public final static int STATUS_DRAFT = 1;
-    /**
-     * 发布
-     */
-    public final static int STATUS_PUBLIC = 2;
+public class NoticeDto {
     /**
      * 通知id
      */
-    @Id
     private Long noticeId;
     /**
      * 主标题
@@ -34,10 +19,6 @@ public class NoticeInfo {
      */
     private String subTitle;
     /**
-     * 通知内容
-     */
-    private String noticeContent;
-    /**
      * 通知状态 1草稿 2发布
      */
     private Integer noticeStatus;
@@ -45,6 +26,10 @@ public class NoticeInfo {
      * 发布用户id
      */
     private Long publishUserId;
+    /**
+     * 发布用户姓名
+     */
+    private String publishUserName;
     /**
      * 发布时间
      */
@@ -54,13 +39,13 @@ public class NoticeInfo {
      */
     private Long createUserId;
     /**
+     * 创建用户姓名
+     */
+    private String createUserName;
+    /**
      * 创建时间
      */
     private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 
     public Long getNoticeId() {
         return noticeId;
@@ -86,14 +71,6 @@ public class NoticeInfo {
         this.subTitle = subTitle;
     }
 
-    public String getNoticeContent() {
-        return noticeContent;
-    }
-
-    public void setNoticeContent(String noticeContent) {
-        this.noticeContent = noticeContent;
-    }
-
     public Integer getNoticeStatus() {
         return noticeStatus;
     }
@@ -108,6 +85,14 @@ public class NoticeInfo {
 
     public void setPublishUserId(Long publishUserId) {
         this.publishUserId = publishUserId;
+    }
+
+    public String getPublishUserName() {
+        return publishUserName;
+    }
+
+    public void setPublishUserName(String publishUserName) {
+        this.publishUserName = publishUserName;
     }
 
     public Date getPublishTime() {
@@ -126,19 +111,19 @@ public class NoticeInfo {
         this.createUserId = createUserId;
     }
 
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }
