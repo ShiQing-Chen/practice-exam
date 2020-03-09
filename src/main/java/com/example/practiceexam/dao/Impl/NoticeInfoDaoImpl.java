@@ -2,6 +2,8 @@ package com.example.practiceexam.dao.Impl;
 
 import com.example.practiceexam.dao.NoticeInfoDaoCustom;
 import com.example.practiceexam.dto.NoticeDto;
+import com.example.practiceexam.dto.NoticeInfoDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.param.SearchNoticeParam;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -123,5 +125,58 @@ public class NoticeInfoDaoImpl implements NoticeInfoDaoCustom {
             return count.intValue();
         }
         return 0;
+    }
+
+    /**
+     * 根据ID获取详情
+     * @param noticeId
+     * @return
+     */
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public NoticeInfoDto getInfoById(Long noticeId) {
+        if (noticeId == null) {
+            return null;
+        }
+        Session session = entityManager.unwrap(Session.class);
+        String sqlSb = " select n.notice_id noticeId, n.main_title mainTitle, n.sub_title subTitle, n.notice_content noticeContent,  " +
+                " n.notice_status noticeStatus, n.create_user_id createUserId, cu.nick_name createUserName, n.create_time createTime, " +
+                " n.publish_user_id publishUserId, pu.nick_name publishUserName, n.publish_time publishTime " +
+                " from notice_info n " +
+                " left join user_info cu on n.create_user_id = cu.user_id " +
+                " left join user_info pu on n.publish_user_id = pu.user_id WHERE n.notice_id = :noticeId ";
+        NativeQuery query = session.createSQLQuery(sqlSb);
+        query.addScalar("noticeId", StandardBasicTypes.LONG)
+                .addScalar("mainTitle", StandardBasicTypes.STRING)
+                .addScalar("subTitle", StandardBasicTypes.STRING)
+                .addScalar("noticeContent", StandardBasicTypes.STRING)
+                .addScalar("noticeStatus", StandardBasicTypes.INTEGER)
+                .addScalar("publishUserId", StandardBasicTypes.LONG)
+                .addScalar("publishUserName", StandardBasicTypes.STRING)
+                .addScalar("publishTime", StandardBasicTypes.TIMESTAMP)
+                .addScalar("createUserId", StandardBasicTypes.LONG)
+                .addScalar("createUserName", StandardBasicTypes.STRING)
+                .addScalar("createTime", StandardBasicTypes.TIMESTAMP);
+        query.setParameter("noticeId", noticeId);
+        query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(NoticeInfoDto.class));
+        return (NoticeInfoDto) query.uniqueResult();
+    }
+
+    /**
+     * 首页获取前5条
+     * @return
+     */
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public List<ValueLabelDto> indexGetList() {
+        Session session = entityManager.unwrap(Session.class);
+        NativeQuery query = session.createSQLQuery(
+                " select n.notice_id value, n.main_title label from notice_info n where n.notice_status=2 order by n.create_time desc ");
+        query.addScalar("value", StandardBasicTypes.LONG)
+                .addScalar("label", StandardBasicTypes.STRING);
+        query.setFirstResult(0);
+        query.setMaxResults(5);
+        query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(ValueLabelDto.class));
+        return query.list();
     }
 }

@@ -39,6 +39,13 @@ public interface NoticeInfoService {
     MessageVo getById(Long noticeId);
 
     /**
+     * 根据id获取详细信息
+     * @param noticeId
+     * @return
+     */
+    MessageVo getInfoById(Long noticeId);
+
+    /**
      * 发布通知
      * @param sharedUser
      * @param noticeId
@@ -52,4 +59,10 @@ public interface NoticeInfoService {
      * @return
      */
     MessageVo getListByPage(SearchNoticeParam noticeParam);
+
+    /**
+     * 首页获取前5条
+     * @return
+     */
+    MessageVo indexGetList();
 }

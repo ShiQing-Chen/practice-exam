@@ -5,6 +5,8 @@ import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.NoticeInfoDao;
 import com.example.practiceexam.dto.NoticeDto;
+import com.example.practiceexam.dto.NoticeInfoDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.form.AddNoticeForm;
 import com.example.practiceexam.form.UpdateNoticeForm;
 import com.example.practiceexam.model.NoticeInfo;
@@ -16,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -107,6 +110,23 @@ public class NoticeInfoServiceImpl implements NoticeInfoService {
     }
 
     /**
+     * 根据id获取信息详情
+     * @param noticeId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getInfoById(Long noticeId) {
+        if (noticeId != null) {
+            NoticeInfoDto noticeInfoDto = noticeInfoDao.getInfoById(noticeId);
+            if (noticeInfoDto != null) {
+                return MessageVo.success(noticeInfoDto);
+            }
+        }
+        return MessageVo.fail("获取资料失败！");
+    }
+
+    /**
      * 发布通知
      * @param sharedUser
      * @param noticeId
@@ -149,5 +169,19 @@ public class NoticeInfoServiceImpl implements NoticeInfoService {
         } else {
             return MessageVo.success(Lists.newArrayList());
         }
+    }
+
+    /**
+     * 首页获取前五条
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo indexGetList() {
+        List<ValueLabelDto> list = noticeInfoDao.indexGetList();
+        if (CollectionUtils.isEmpty(list)) {
+            return MessageVo.success(Lists.newArrayList());
+        }
+        return MessageVo.success(list);
     }
 }

@@ -170,7 +170,7 @@ public class MaterialInfoDaoImpl implements MaterialInfoDaoCustom {
     public List<ValueLabelDto> indexGetList() {
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(
-                " select n.material_id value, n.main_title label from material_info n order by n.create_time desc ");
+                " select n.material_id value, n.main_title label from material_info n where n.material_status=2 order by n.create_time desc ");
         query.addScalar("value", StandardBasicTypes.LONG)
                 .addScalar("label", StandardBasicTypes.STRING);
         query.setFirstResult(0);

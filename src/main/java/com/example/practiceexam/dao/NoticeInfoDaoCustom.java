@@ -1,6 +1,8 @@
 package com.example.practiceexam.dao;
 
 import com.example.practiceexam.dto.NoticeDto;
+import com.example.practiceexam.dto.NoticeInfoDto;
+import com.example.practiceexam.dto.ValueLabelDto;
 import com.example.practiceexam.param.SearchNoticeParam;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +26,17 @@ public interface NoticeInfoDaoCustom {
      * @return
      */
     Integer getCountByPage(SearchNoticeParam param);
+
+    /**
+     * 根据ID获取详情
+     * @param noticeId
+     * @return
+     */
+    NoticeInfoDto getInfoById(Long noticeId);
+
+    /**
+     * 首页获取前5条
+     * @return
+     */
+    List<ValueLabelDto> indexGetList();
 }

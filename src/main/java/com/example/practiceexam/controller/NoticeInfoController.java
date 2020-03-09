@@ -89,6 +89,20 @@ public class NoticeInfoController {
     }
 
     /**
+     * 根据id获取详细信息
+     * @param noticeId 通知ID
+     * @return
+     */
+    @RequestMapping(value = "/notice/getInfoById", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getInfoById(Long noticeId) {
+        if (noticeId == null) {
+            return MessageVo.fail("缺少通知ID参数！");
+        }
+        return noticeInfoService.getInfoById(noticeId);
+    }
+
+    /**
      * 发布通知
      * @param noticeId 通知ID
      * @return
@@ -120,5 +134,15 @@ public class NoticeInfoController {
             return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return noticeInfoService.getListByPage(noticeParam);
+    }
+
+    /**
+     * 首页获取前五条下载资料
+     * @return
+     */
+    @RequestMapping(value = "/notice/indexGetList", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo indexGetList() {
+        return noticeInfoService.indexGetList();
     }
 }
