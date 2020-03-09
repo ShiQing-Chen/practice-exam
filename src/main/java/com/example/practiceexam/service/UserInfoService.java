@@ -3,6 +3,7 @@ package com.example.practiceexam.service;
 import com.example.common.cache.SharedUser;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddUserForm;
+import com.example.practiceexam.form.UpdateMyUserForm;
 import com.example.practiceexam.form.UpdateUserForm;
 import com.example.practiceexam.param.SearchUserParam;
 
@@ -118,4 +119,28 @@ public interface UserInfoService {
      * @return
      */
     MessageVo adminGetListByPage(SearchUserParam userParam);
+
+    /**
+     * 修改个人信息
+     * @param userForm
+     * @return
+     */
+    MessageVo updateMyInfo(UpdateMyUserForm userForm);
+
+    /**
+     * 修改个人密码
+     * 校验旧密码
+     * @param sharedUser
+     * @param password
+     * @return
+     */
+    MessageVo checkOldPassword(SharedUser sharedUser, String password);
+
+    /**
+     * 修改个人密码
+     * @param sharedUser
+     * @param password
+     * @return
+     */
+    MessageVo updatePassword(SharedUser sharedUser, String password);
 }

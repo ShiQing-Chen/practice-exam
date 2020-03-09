@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * 学生信息dao层
  * @author ShiQing_Chen  2020/3/5  17:53
@@ -45,4 +47,11 @@ public interface StudentInfoDao extends JpaRepository<StudentInfo, Long>, Studen
      */
     @Query(value = "SELECT COUNT(*) FROM student_info s WHERE s.student_id <> ?1 AND s.student_number = ?2", nativeQuery = true)
     int checkStudentNumber(Long studentId, String studentNumber);
+
+    /**
+     * 根据userId获取学生信息
+     * @param userId
+     * @return
+     */
+    List<StudentInfo> getByUserId(Long userId);
 }

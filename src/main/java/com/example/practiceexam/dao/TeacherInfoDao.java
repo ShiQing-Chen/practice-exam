@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * 教师信息dao层
  * @author ShiQing_Chen  2020/3/5  17:52
@@ -46,4 +48,11 @@ public interface TeacherInfoDao extends JpaRepository<TeacherInfo, Long>, Teache
      */
     @Query(value = "SELECT COUNT(*) FROM teacher_info t WHERE t.teacher_id <> ?1 AND t.teacher_number = ?2", nativeQuery = true)
     int checkTeacherNumber(Long teacherId, String teacherNumber);
+
+    /**
+     * 根据userId获取教师信息
+     * @param userId
+     * @return
+     */
+    List<TeacherInfo> getByUserId(Long userId);
 }

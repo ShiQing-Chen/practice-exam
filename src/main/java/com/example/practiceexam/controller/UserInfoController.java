@@ -4,6 +4,8 @@ import com.example.common.cache.SharedUser;
 import com.example.common.util.BindingResultUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddUserForm;
+import com.example.practiceexam.form.PasswordForm;
+import com.example.practiceexam.form.UpdateMyUserForm;
 import com.example.practiceexam.form.UpdateUserForm;
 import com.example.practiceexam.param.SearchUserParam;
 import com.example.practiceexam.service.UserInfoService;
@@ -213,17 +215,20 @@ public class UserInfoController {
 
     /**
      * 更换头像
-     * @param userId
+     * @param sharedUser
      * @param avatar
      * @return
      */
     @RequestMapping(value = "/user/changeAvatar", method = RequestMethod.GET)
     @ResponseBody
-    public MessageVo changeAvatar(Long userId, String avatar) {
-        if (userId == null || StringUtils.isBlank(avatar)) {
-            return MessageVo.fail("更换头像失败，缺少用户ID或头像地址参数！");
+    public MessageVo changeAvatar(SharedUser sharedUser, String avatar) {
+        if (sharedUser == null) {
+            return MessageVo.fail("更换头像失败，请登录后重试！");
         }
-        return userInfoService.changeAvatar(userId, avatar);
+        if (StringUtils.isBlank(avatar)) {
+            return MessageVo.fail("更换头像失败，缺少头像地址参数！");
+        }
+        return userInfoService.changeAvatar(sharedUser.getUserId(), avatar);
     }
 
     /**
@@ -245,4 +250,69 @@ public class UserInfoController {
     }
 
 
+    /**
+     * 获取用户详细信息
+     * @param sharedUser
+     * @return
+     */
+    @RequestMapping(value = "/user/getMyInfo", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getMyInfo(SharedUser sharedUser) {
+        if (sharedUser == null) {
+            return MessageVo.fail("请登录后重试！");
+        }
+        return userInfoService.getInfoById(sharedUser.getUserId());
+    }
+
+    /**
+     * 修改个人信息
+     * @param userForm
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/user/updateMyInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo updateMyInfo(@RequestBody @Valid UpdateMyUserForm userForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return userInfoService.updateMyInfo(userForm);
+    }
+
+    /**
+     * 修改个人密码
+     * 校验旧密码
+     * @param sharedUser
+     * @param password
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/user/checkOldPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo checkOldPassword(SharedUser sharedUser, @RequestBody @Valid PasswordForm password, BindingResult bindingResult) {
+        if (sharedUser == null) {
+            return MessageVo.fail("请登录后重试！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return userInfoService.checkOldPassword(sharedUser, password.getPassword());
+    }
+
+    /**
+     * 修改个人密码
+     * @param password
+     * @return
+     */
+    @RequestMapping(value = "/user/updatePassword", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo updatePassword(SharedUser sharedUser, @RequestBody @Valid PasswordForm password, BindingResult bindingResult) {
+        if (sharedUser == null) {
+            return MessageVo.fail("请登录后重试！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return userInfoService.updatePassword(sharedUser, password.getPassword());
+    }
 }

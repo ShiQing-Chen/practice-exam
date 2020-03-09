@@ -3,10 +3,19 @@ package com.example.practiceexam.service.Impl;
 import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
+import com.example.practiceexam.dao.ClassInfoDao;
+import com.example.practiceexam.dao.StudentInfoDao;
+import com.example.practiceexam.dao.TeacherInfoDao;
 import com.example.practiceexam.dao.UserInfoDao;
 import com.example.practiceexam.dto.UserDto;
+import com.example.practiceexam.dto.UserInfoDto;
 import com.example.practiceexam.form.AddUserForm;
+import com.example.practiceexam.form.PasswordForm;
+import com.example.practiceexam.form.UpdateMyUserForm;
 import com.example.practiceexam.form.UpdateUserForm;
+import com.example.practiceexam.model.ClassInfo;
+import com.example.practiceexam.model.StudentInfo;
+import com.example.practiceexam.model.TeacherInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.param.SearchUserParam;
 import com.example.practiceexam.service.UserInfoService;
@@ -18,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +41,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private UserInfoDao userInfoDao;
+
+    @Autowired
+    private TeacherInfoDao teacherInfoDao;
+
+    @Autowired
+    private StudentInfoDao studentInfoDao;
+
+    @Autowired
+    private ClassInfoDao classInfoDao;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -97,6 +116,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             update.setAvatar(userForm.getAvatar());
             update.setMobile(userForm.getMobile());
             update.setUserType(userForm.getUserType());
+            update.setGender(userForm.getGender());
             if (StringUtils.isBlank(update.getMobile())) {
                 update.setMobile(null);
             }
@@ -202,7 +222,38 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userId != null) {
             UserInfo user = userInfoDao.getById(userId);
             if (user != null) {
-                return MessageVo.success(user);
+                UserInfoDto infoDto = new UserInfoDto();
+                BeanUtils.copyProperties(user, infoDto);
+                // 判断用户类型
+                if (user.getUserType() != null) {
+                    if (user.getUserType().equals(UserInfo.TYPE_TEACHER)) {
+                        List<TeacherInfo> teacherInfos = teacherInfoDao.getByUserId(userId);
+                        if (!CollectionUtils.isEmpty(teacherInfos)) {
+                            TeacherInfo teacherInfo = teacherInfos.get(0);
+                            if (teacherInfo != null) {
+                                infoDto.setName(teacherInfo.getTeacherName());
+                                infoDto.setTeacherNumber(teacherInfo.getTeacherNumber());
+                            }
+                        }
+                    } else if (user.getUserType().equals(UserInfo.TYPE_STUDENT)) {
+                        List<StudentInfo> studentInfos = studentInfoDao.getByUserId(userId);
+                        if (!CollectionUtils.isEmpty(studentInfos)) {
+                            StudentInfo studentInfo = studentInfos.get(0);
+                            if (studentInfo != null) {
+                                infoDto.setName(studentInfo.getStudentName());
+                                infoDto.setStudentNumber(studentInfo.getStudentNumber());
+                                if (studentInfo.getClassId() != null) {
+                                    ClassInfo classInfo = classInfoDao.getById(studentInfo.getClassId());
+                                    if (classInfo != null) {
+                                        infoDto.setClassName(classInfo.getClassName());
+                                        infoDto.setMajorName(classInfo.getMajorName());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return MessageVo.success(infoDto);
             }
         }
         return MessageVo.fail("获取用户信息失败！");
@@ -316,4 +367,97 @@ public class UserInfoServiceImpl implements UserInfoService {
             return MessageVo.success(Lists.newArrayList());
         }
     }
+
+
+    /**
+     * 修改个人信息
+     * @param userForm
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo updateMyInfo(UpdateMyUserForm userForm) {
+        UserInfo update = userInfoDao.getById(userForm.getUserId());
+        if (update != null) {
+            //查看LoginName、Mobile是否已经存在
+            if (StringUtils.isNotBlank(userForm.getMobile())) {
+                if (userInfoDao.checkLogNameAndMobile(userForm.getUserId(), userForm.getLoginName(), userForm.getMobile()) > 0) {
+                    return MessageVo.fail("修改用户信息失败！用户名或手机号已被使用！");
+                }
+            } else {
+                if (userInfoDao.checkLoginName(userForm.getUserId(), userForm.getLoginName()) > 0) {
+                    return MessageVo.fail("修改用户信息失败！用户名已被使用！");
+                }
+            }
+            update.setLoginName(userForm.getLoginName());
+            update.setNickName(userForm.getNickName());
+            update.setMobile(userForm.getMobile());
+            update.setGender(userForm.getGender());
+            if (StringUtils.isBlank(update.getMobile())) {
+                update.setMobile(null);
+            }
+            UserInfo result = userInfoDao.save(update);
+            if (update.getUserType() != null) {
+                if (update.getUserType().equals(UserInfo.TYPE_TEACHER)) {
+                    List<TeacherInfo> teacherInfos = teacherInfoDao.getByUserId(update.getUserId());
+                    if (!CollectionUtils.isEmpty(teacherInfos)) {
+                        TeacherInfo teacherInfo = teacherInfos.get(0);
+                        if (teacherInfo != null) {
+                            teacherInfo.setTeacherName(userForm.getName());
+                            teacherInfoDao.save(teacherInfo);
+                        }
+                    }
+                } else if (update.getUserType().equals(UserInfo.TYPE_STUDENT)) {
+                    List<StudentInfo> studentInfos = studentInfoDao.getByUserId(update.getUserId());
+                    if (!CollectionUtils.isEmpty(studentInfos)) {
+                        StudentInfo studentInfo = studentInfos.get(0);
+                        if (studentInfo != null) {
+                            studentInfo.setStudentName(userForm.getName());
+                            studentInfoDao.save(studentInfo);
+                        }
+                    }
+                }
+            }
+            return MessageVo.success(result);
+        }
+        return MessageVo.fail("修改信息失败！");
+    }
+
+    /**
+     * 修改个人密码
+     * 校验旧密码
+     * @param sharedUser
+     * @param password
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo checkOldPassword(SharedUser sharedUser, String password) {
+        if (sharedUser != null && StringUtils.isNotBlank(password)) {
+            UserInfo update = userInfoDao.getById(sharedUser.getUserId());
+            if (update != null && passwordEncoder.matches(password, update.getLoginPass())) {
+                return MessageVo.success();
+            }
+        }
+        return MessageVo.fail("旧密码校验失败！");
+    }
+
+    /**
+     * 修改个人密码
+     * @param sharedUser
+     * @param password
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo updatePassword(SharedUser sharedUser, String password) {
+        if (sharedUser != null && StringUtils.isNotBlank(password)) {
+            UserInfo update = userInfoDao.getById(sharedUser.getUserId());
+            update.setLoginPass(passwordEncoder.encode(password));
+            userInfoDao.save(update);
+            return MessageVo.success();
+        }
+        return MessageVo.fail("修改密码失败！");
+    }
+
 }
