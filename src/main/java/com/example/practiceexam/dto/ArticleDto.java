@@ -1,31 +1,19 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 交流驿站
- * 帖子信息表
- * @author ShiQing_Chen  2020/3/5  00:48
+ * @author ShiQing_Chen  2020/3/11  01:04
  **/
-@Entity
-@Table(name = "article_info")
-public class ArticleInfo {
+public class ArticleDto {
     /**
      * 帖子id
      */
-    @Id
     private Long articleId;
     /**
      * 帖子标题
      */
     private String articleTitle;
-    /**
-     * 帖子内容
-     */
-    private String articleContent;
     /**
      * 帖子类型
      * 1想知道  2技术分享  3生活休闲
@@ -35,6 +23,10 @@ public class ArticleInfo {
      * 创建用户id
      */
     private Long createUserId;
+    /**
+     * 创建用户
+     */
+    private String createUserName;
     /**
      * 创建时间
      */
@@ -56,14 +48,6 @@ public class ArticleInfo {
         this.articleTitle = articleTitle;
     }
 
-    public String getArticleContent() {
-        return articleContent;
-    }
-
-    public void setArticleContent(String articleContent) {
-        this.articleContent = articleContent;
-    }
-
     public Integer getArticleType() {
         return articleType;
     }
@@ -78,6 +62,14 @@ public class ArticleInfo {
 
     public void setCreateUserId(Long createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 
     public Date getCreateTime() {
