@@ -25,6 +25,10 @@ public class ApiUserInfoVo {
      */
     private String avatar;
     /**
+     * 未读消息数量
+     */
+    private Integer messageNumber = 0;
+    /**
      * 用户角色编码
      */
     private Set<String> roleCodes = Sets.newHashSet();
@@ -59,6 +63,14 @@ public class ApiUserInfoVo {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Integer getMessageNumber() {
+        return messageNumber;
+    }
+
+    public void setMessageNumber(Integer messageNumber) {
+        this.messageNumber = messageNumber;
     }
 
     public Set<String> getRoleCodes() {

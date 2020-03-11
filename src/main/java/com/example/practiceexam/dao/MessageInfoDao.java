@@ -55,4 +55,11 @@ public interface MessageInfoDao extends JpaRepository<MessageInfo, Long> {
      */
     @Query(value = "select count(*) from message_info m where m.accept_user_id = ?1 ", nativeQuery = true)
     Integer getCountByPage(Long acceptUserId);
+
+    /**
+     * 获取未读消息数量
+     * @return
+     */
+    @Query(value = "select count(*) from message_info m where m.accept_user_id = ?1 and m.message_status = 1", nativeQuery = true)
+    Integer getUnReadNumber(Long acceptUserId);
 }

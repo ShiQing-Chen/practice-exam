@@ -5,6 +5,7 @@ import com.example.common.util.JwtTokenUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.config.OnlineUserManager;
 import com.example.practiceexam.config.RoleManager;
+import com.example.practiceexam.dao.MessageInfoDao;
 import com.example.practiceexam.dao.UserInfoDao;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.service.ApiLoginService;
@@ -40,6 +41,8 @@ public class ApiLoginServiceImpl implements ApiLoginService {
     private UserInfoDao userInfoDao;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private MessageInfoDao messageInfoDao;
 
     @Value("${jwt.secretKey}")
     private String jwtSecretKey;
@@ -173,6 +176,11 @@ public class ApiLoginServiceImpl implements ApiLoginService {
         //补充角色code
         Set<String> roles = RoleManager.getRoleByType(userInfo.get().getUserType());
         apiUserInfoVo.setRoleCodes(roles);
+        // 补充未读消息数量
+        Integer messageNumber = messageInfoDao.getUnReadNumber(apiUserInfoVo.getUserId());
+        if (messageNumber != null) {
+            apiUserInfoVo.setMessageNumber(messageNumber);
+        }
         return MessageVo.success("成功", apiUserInfoVo);
     }
 
