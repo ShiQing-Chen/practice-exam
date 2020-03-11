@@ -2,7 +2,6 @@ package com.example.practiceexam.dao.Impl;
 
 import com.example.practiceexam.dao.ArticleInfoDaoCustom;
 import com.example.practiceexam.dto.ArticleDto;
-import com.example.practiceexam.dto.MaterialDto;
 import com.example.practiceexam.param.SearchArticleParam;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -55,6 +54,10 @@ public class ArticleInfoDaoImpl implements ArticleInfoDaoCustom {
             sqlSb.append(" AND n.article_type in(:articleType) ");
             paramMap.put("articleType", param.getArticleType());
         }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND n.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
+        }
         if ("desc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
             sqlSb.append(" order by ").append(param.getSort()).append(" desc");
         } else if ("asc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
@@ -103,6 +106,10 @@ public class ArticleInfoDaoImpl implements ArticleInfoDaoCustom {
         if (!CollectionUtils.isEmpty(param.getArticleType())) {
             sqlSb.append(" AND n.article_type in(:articleType) ");
             paramMap.put("articleType", param.getArticleType());
+        }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND n.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());

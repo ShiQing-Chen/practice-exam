@@ -19,9 +19,23 @@ public interface ArticleInfoService {
     MessageVo add(SharedUser sharedUser, AddArticleForm addArticleForm);
 
     /**
+     * 根据id删除
+     * @param articleId
+     * @return
+     */
+    MessageVo delById(Long articleId);
+
+    /**
+     * 获取帖子详细信息
+     * @param articleId
+     * @return
+     */
+    MessageVo getInfoById(Long articleId);
+
+    /**
      * 分页查询
      * @param param
      * @return
      */
-    MessageVo getListByPage(SearchArticleParam param);
+    MessageVo getListByPage(SharedUser sharedUser, SearchArticleParam param);
 }

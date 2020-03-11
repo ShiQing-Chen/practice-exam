@@ -45,19 +45,47 @@ public class ArticleInfoController {
     }
 
     /**
+     * 根据id删除
+     * @param articleId 帖子ID
+     * @return
+     */
+    @RequestMapping(value = "/article/delById", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo delById(Long articleId) {
+        if (articleId == null) {
+            return MessageVo.fail("缺少帖子ID参数！");
+        }
+        return articleInfoService.delById(articleId);
+    }
+
+    /**
+     * 获取帖子详细信息
+     * @param articleId
+     * @return
+     */
+    @RequestMapping(value = "/article/getInfoById", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getInfoById(Long articleId) {
+        if (articleId == null) {
+            return MessageVo.fail("缺少帖子ID参数！");
+        }
+        return articleInfoService.getInfoById(articleId);
+    }
+
+    /**
      * 分页查询
      * @param param
      * @return
      */
     @RequestMapping(value = "/article/getListByPage", method = RequestMethod.POST)
     @ResponseBody
-    public MessageVo getListByPage(@RequestBody @Valid SearchArticleParam param, BindingResult bindingResult) {
+    public MessageVo getListByPage(SharedUser sharedUser, @RequestBody @Valid SearchArticleParam param, BindingResult bindingResult) {
         if (param == null) {
-            return MessageVo.fail("获取资料数据失败！");
+            return MessageVo.fail("获取帖子数据失败！");
         }
         if (bindingResult.hasErrors()) {
             return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
-        return articleInfoService.getListByPage(param);
+        return articleInfoService.getListByPage(sharedUser, param);
     }
 }

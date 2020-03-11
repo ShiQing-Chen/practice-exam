@@ -15,6 +15,14 @@ public class SearchArticleParam {
     @Size(max = 20, message = "搜索内容长度不超过20个字符！")
     private String search;
     private List<Integer> articleType;
+    /**
+     * 是否查询自己的
+     */
+    private Boolean searchMy = false;
+    /**
+     * 创建人ID
+     */
+    private Long createUserId;
 
     public String getSort() {
         return sort;
@@ -62,5 +70,21 @@ public class SearchArticleParam {
 
     public void setArticleType(List<Integer> articleType) {
         this.articleType = articleType;
+    }
+
+    public Boolean getSearchMy() {
+        return searchMy;
+    }
+
+    public void setSearchMy(Boolean searchMy) {
+        this.searchMy = searchMy;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 }
