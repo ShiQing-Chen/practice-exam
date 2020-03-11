@@ -160,3 +160,14 @@ CREATE TABLE `message_info` (
   key `idx_accept_user_id` (`accept_user_id`),
   key `idx_create_user_id` (`create_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '消息信息表';
+
+DROP TABLE IF EXISTS `system_message_log`;
+
+CREATE TABLE `system_message_log` (
+  `message_id` bigint(20) NOT NULL COMMENT '消息ID',
+  `message_content` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '消息内容',
+  `accept_user_type` smallint(6) DEFAULT NULL COMMENT '接受用户类型',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间'
+  PRIMARY KEY (`message_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '消息消息发布记录表';
