@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS `teacher_info`;
 CREATE TABLE `teacher_info` (
   `teacher_id` bigint(20) NOT NULL COMMENT '教师ID',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `course_id` bigint(20) NOT NULL COMMENT '课程',
   `teacher_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '教师工号',
   `teacher_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '教师名称',
   `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',

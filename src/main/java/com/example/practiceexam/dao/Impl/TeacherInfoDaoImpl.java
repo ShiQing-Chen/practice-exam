@@ -43,8 +43,9 @@ public class TeacherInfoDaoImpl implements TeacherInfoDaoCustom {
             return Lists.newArrayList();
         }
         StringBuilder sqlSb = new StringBuilder();
-        sqlSb.append(" select t.teacher_id teacherId, t.teacher_number teacherNumber, t.teacher_name teacherName ");
-        sqlSb.append(" from teacher_info t WHERE 1=1 ");
+        sqlSb.append(" select t.teacher_id teacherId, c.course_name courseName, t.teacher_number teacherNumber, t.teacher_name teacherName ");
+        sqlSb.append(" from teacher_info t ");
+        sqlSb.append(" left join course_info c on t.course_id = c.course_id WHERE 1=1 ");
 
         Map<String, Object> paramMap = Maps.newHashMap();
         if (StringUtils.isNotEmpty(param.getSearch())) {
@@ -59,6 +60,7 @@ public class TeacherInfoDaoImpl implements TeacherInfoDaoCustom {
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());
         query.addScalar("teacherId", StandardBasicTypes.LONG)
+                .addScalar("courseName", StandardBasicTypes.STRING)
                 .addScalar("teacherNumber", StandardBasicTypes.STRING)
                 .addScalar("teacherName", StandardBasicTypes.STRING);
         if (!CollectionUtils.isEmpty(paramMap)) {
@@ -122,9 +124,11 @@ public class TeacherInfoDaoImpl implements TeacherInfoDaoCustom {
         }
         StringBuilder sqlSb = new StringBuilder();
         sqlSb.append(" select t.teacher_id teacherId, t.user_id userId, t.teacher_number teacherNumber, ");
+        sqlSb.append(" c.course_id courseId, c.course_name courseName, ");
         sqlSb.append(" t.teacher_name teacherName, t.create_time createTime, ");
         sqlSb.append(" u.avatar avatar, u.user_type userType, u.gender gender, u.mobile mobile ");
         sqlSb.append(" from teacher_info t left join user_info u on t.user_id=u.user_id ");
+        sqlSb.append(" left join course_info c on t.course_id = c.course_id ");
         sqlSb.append(" where 1=1 ");
 
         Map<String, Object> paramMap = Maps.newHashMap();
@@ -141,6 +145,8 @@ public class TeacherInfoDaoImpl implements TeacherInfoDaoCustom {
         NativeQuery query = session.createSQLQuery(sqlSb.toString());
         query.addScalar("teacherId", StandardBasicTypes.LONG)
                 .addScalar("userId", StandardBasicTypes.LONG)
+                .addScalar("courseId", StandardBasicTypes.LONG)
+                .addScalar("courseName", StandardBasicTypes.STRING)
                 .addScalar("teacherNumber", StandardBasicTypes.STRING)
                 .addScalar("teacherName", StandardBasicTypes.STRING)
                 .addScalar("createTime", StandardBasicTypes.TIMESTAMP)
@@ -172,7 +178,8 @@ public class TeacherInfoDaoImpl implements TeacherInfoDaoCustom {
         }
         StringBuilder sqlSb = new StringBuilder();
         sqlSb.append(" select COUNT(*) count ");
-        sqlSb.append(" from teacher_info t left join user_info u on t.user_id=u.user_id where 1=1 ");
+        sqlSb.append(" from teacher_info t left join user_info u on t.user_id=u.user_id ");
+        sqlSb.append(" left join course_info c on t.course_id = c.course_id where 1=1 ");
 
         Map<String, Object> paramMap = Maps.newHashMap();
         if (StringUtils.isNotEmpty(param.getSearch())) {

@@ -131,6 +131,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
             }
             teacherInfo.setTeacherNumber(form.getTeacherNumber());
             teacherInfo.setTeacherName(form.getTeacherName());
+            teacherInfo.setCourseId(form.getCourseId());
             teacherInfoDao.save(teacherInfo);
 
             Date curDate = new Date();

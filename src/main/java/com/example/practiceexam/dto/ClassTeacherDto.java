@@ -9,6 +9,10 @@ public class ClassTeacherDto {
      */
     private Long teacherId;
     /**
+     * 课程名称
+     */
+    private String courseName;
+    /**
      * 教师工号
      */
     private String teacherNumber;
@@ -23,6 +27,14 @@ public class ClassTeacherDto {
 
     public void setTeacherId(Long teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public String getTeacherNumber() {

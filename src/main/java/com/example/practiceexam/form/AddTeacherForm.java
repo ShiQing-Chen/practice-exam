@@ -1,6 +1,7 @@
 package com.example.practiceexam.form;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -21,6 +22,11 @@ public class AddTeacherForm {
     @Size(min = 2, max = 30, message = "教师名称长度为 2 ~ 30 个字符！")
     private String teacherName;
     /**
+     * 课程id
+     */
+    @NotNull(message = "课程不能为空！")
+    private Long courseId;
+    /**
      * 性别:1男，2女
      */
     private Integer gender;
@@ -39,6 +45,14 @@ public class AddTeacherForm {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public Integer getGender() {

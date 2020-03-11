@@ -22,6 +22,10 @@ public class TeacherInfo {
      */
     private Long userId;
     /**
+     * 课程id
+     */
+    private Long courseId;
+    /**
      * 教师工号
      */
     private String teacherNumber;
@@ -56,6 +60,14 @@ public class TeacherInfo {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public String getTeacherNumber() {
