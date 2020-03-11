@@ -172,3 +172,34 @@ CREATE TABLE `system_message_log` (
   `create_time` datetime NOT NULL COMMENT '创建时间'
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '消息消息发布记录表';
+
+
+DROP TABLE IF EXISTS `question_info`;
+
+CREATE TABLE `question_info` (
+  `question_id` bigint(20) NOT NULL COMMENT '试题ID',
+  `question_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '试题编号',
+  `course_id` bigint(20) NOT NULL COMMENT '课程ID',
+  `question_type` smallint(6) DEFAULT NULL COMMENT '试题类型 1选择题 2操作题',
+  `question_status` smallint(6) DEFAULT 1 COMMENT '试题状态 1草稿 2待审核 3审核未通过 4审核通过',
+  `question_difficulty` smallint(6) DEFAULT 1 COMMENT '试题难易程度 1简单 2中等 3困难',
+  `question_title` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '题干',
+  `question_answer` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '答案',
+  `question_analyze` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '解析',
+  `question_choice_a` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '解析',
+  `question_choice_b` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '解析',
+  `question_choice_c` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '解析',
+  `question_choice_d` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '解析',
+  `review_user_id` bigint(20) DEFAULT NULL COMMENT '审核用户id',
+  `review_time` datetime DEFAULT NULL COMMENT '审核时间',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`question_id`),
+    key `idx_question_code` (`question_code`),
+    key `idx_course_id` (`course_id`),
+    key `idx_question_type` (`question_type`),
+    key `idx_question_status` (`question_status`),
+    key `idx_question_difficulty` (`question_difficulty`),
+    key `idx_create_user_id` (`create_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试题信息表';
