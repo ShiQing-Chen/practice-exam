@@ -4,12 +4,17 @@ import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.ArticleCommentDao;
+import com.example.practiceexam.dao.ArticleInfoDao;
+import com.example.practiceexam.dao.MessageInfoDao;
 import com.example.practiceexam.dao.UserInfoDao;
 import com.example.practiceexam.form.AddCommentForm;
 import com.example.practiceexam.model.ArticleComment;
+import com.example.practiceexam.model.ArticleInfo;
+import com.example.practiceexam.model.MessageInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.param.SearchCommentParam;
 import com.example.practiceexam.service.ArticleCommentService;
+import com.example.practiceexam.utils.MessageUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +35,10 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     private ArticleCommentDao articleCommentDao;
     @Autowired
     private UserInfoDao userInfoDao;
+    @Autowired
+    private MessageInfoDao messageInfoDao;
+    @Autowired
+    private ArticleInfoDao articleInfoDao;
 
     /**
      * 发表评论
@@ -53,6 +62,18 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
                 comment.setCreateUserAvatar(userInfo.getAvatar());
             }
             articleCommentDao.save(comment);
+            ArticleInfo articleInfo = articleInfoDao.getById(comment.getArticleId());
+            if (articleInfo != null && !sharedUser.getUserId().equals(articleInfo.getCreateUserId())) {
+                // 记录消息
+                MessageInfo messageInfo = new MessageInfo();
+                messageInfo.setMessageId(IdGeneratorUtils.getNewId());
+                messageInfo.setMessageType(MessageInfo.TYPE_COMMENT);
+                messageInfo.setAcceptUserId(articleInfo.getCreateUserId());
+                messageInfo.setMessageContent(
+                        MessageUtil.getCommentMessage(sharedUser.getNickName(), articleInfo.getArticleTitle(), curDate));
+                messageInfo.setCreateTime(curDate);
+                messageInfoDao.save(messageInfo);
+            }
             return MessageVo.success();
         }
         return MessageVo.fail("评论失败！");

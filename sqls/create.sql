@@ -143,3 +143,20 @@ CREATE TABLE `article_comment` (
   `order_number` int(11) DEFAULT NULL COMMENT '评论序号',
   PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '帖子评论信息表';
+
+DROP TABLE IF EXISTS `message_info`;
+
+CREATE TABLE `message_info` (
+  `message_id` bigint(20) NOT NULL COMMENT '消息ID',
+  `message_content` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '消息内容',
+  `message_type` smallint(6) DEFAULT NULL COMMENT '消息类型',
+  `accept_user_id` bigint(20) DEFAULT NULL COMMENT '接受用户id',
+  `message_status` smallint(6) DEFAULT NULL COMMENT '消息状态',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`message_id`),
+  key `idx_message_type` (`message_type`),
+  key `idx_accept_user_id` (`accept_user_id`),
+  key `idx_create_user_id` (`create_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '消息信息表';
