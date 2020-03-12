@@ -1,111 +1,70 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.form;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
- * 试题信息表
- * @author ShiQing_Chen  2020/3/12  01:53
+ * @author ShiQing_Chen  2020/3/11  00:48
  **/
-@Entity
-@Table(name = "question_info")
-public class QuestionInfo {
-    /**
-     * 试题ID
-     */
-    @Id
-    private Long questionId;
-    /**
-     * 试题编号
-     */
-    private String questionCode;
+public class AddQuesForm {
     /**
      * 课程ID
      */
+    @NotNull(message = "课程ID不能为空！")
     private Long courseId;
     /**
      * 试题类型 1选择题 2操作题
      */
+    @NotNull(message = "试题类型不能为空！")
     private Integer questionType;
     /**
      * 试题状态 1草稿 2待审核 3审核未通过 4审核通过
      */
+    @NotNull(message = "试题状态不能为空！")
     private Integer questionStatus;
     /**
      * 试题难易程度 1简单 2中等 3困难
      */
+    @NotNull(message = "试题难易程度不能为空！")
     private Integer questionDifficulty;
     /**
      * 题干
      */
+    @NotEmpty(message = "题干不能为空！")
+    @Size(max = 1000, message = "题干长度不能超过 1000 个字符！")
     private String questionTitle;
     /**
      * 答案
      */
+    @NotEmpty(message = "答案不能为空！")
+    @Size(max = 800, message = "答案长度不能超过 800 个字符！")
     private String questionAnswer;
     /**
      * 解析
      */
+    @Size(max = 800, message = "解析长度不能超过 800 个字符！")
     private String questionAnalyze;
     /**
      * 选项A
      */
-    @Column(name="question_choice_a")
+    @Size(max = 800, message = "选项A长度不能超过 800 个字符！")
     private String questionChoiceA;
     /**
      * 选项B
      */
-    @Column(name="question_choice_b")
+    @Size(max = 800, message = "选项B长度不能超过 800 个字符！")
     private String questionChoiceB;
     /**
      * 选项C
      */
-    @Column(name="question_choice_c")
+    @Size(max = 800, message = "选项C长度不能超过 800 个字符！")
     private String questionChoiceC;
     /**
      * 选项D
      */
-    @Column(name="question_choice_d")
+    @Size(max = 800, message = "选项D长度不能超过 800 个字符！")
     private String questionChoiceD;
-    /**
-     * 审核用户id
-     */
-    private Long reviewUserId;
-    /**
-     * 审核时间
-     */
-    private Date reviewTime;
-    /**
-     * 创建用户id
-     */
-    private Long createUserId;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
-    public String getQuestionCode() {
-        return questionCode;
-    }
-
-    public void setQuestionCode(String questionCode) {
-        this.questionCode = questionCode;
-    }
 
     public Long getCourseId() {
         return courseId;
@@ -193,45 +152,5 @@ public class QuestionInfo {
 
     public void setQuestionChoiceD(String questionChoiceD) {
         this.questionChoiceD = questionChoiceD;
-    }
-
-    public Long getReviewUserId() {
-        return reviewUserId;
-    }
-
-    public void setReviewUserId(Long reviewUserId) {
-        this.reviewUserId = reviewUserId;
-    }
-
-    public Date getReviewTime() {
-        return reviewTime;
-    }
-
-    public void setReviewTime(Date reviewTime) {
-        this.reviewTime = reviewTime;
-    }
-
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

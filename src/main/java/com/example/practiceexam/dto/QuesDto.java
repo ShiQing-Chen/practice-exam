@@ -1,22 +1,14 @@
-package com.example.practiceexam.model;
+package com.example.practiceexam.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 试题信息表
- * @author ShiQing_Chen  2020/3/12  01:53
+ * @author ShiQing_Chen  2020/3/12  10:24
  **/
-@Entity
-@Table(name = "question_info")
-public class QuestionInfo {
+public class QuesDto {
     /**
      * 试题ID
      */
-    @Id
     private Long questionId;
     /**
      * 试题编号
@@ -26,6 +18,10 @@ public class QuestionInfo {
      * 课程ID
      */
     private Long courseId;
+    /**
+     * 课程名称
+     */
+    private String courseName;
     /**
      * 试题类型 1选择题 2操作题
      */
@@ -53,27 +49,27 @@ public class QuestionInfo {
     /**
      * 选项A
      */
-    @Column(name="question_choice_a")
     private String questionChoiceA;
     /**
      * 选项B
      */
-    @Column(name="question_choice_b")
     private String questionChoiceB;
     /**
      * 选项C
      */
-    @Column(name="question_choice_c")
     private String questionChoiceC;
     /**
      * 选项D
      */
-    @Column(name="question_choice_d")
     private String questionChoiceD;
     /**
      * 审核用户id
      */
     private Long reviewUserId;
+    /**
+     * 审核用户姓名
+     */
+    private String reviewUserName;
     /**
      * 审核时间
      */
@@ -83,13 +79,13 @@ public class QuestionInfo {
      */
     private Long createUserId;
     /**
+     * 创建用户姓名
+     */
+    private String createUserName;
+    /**
      * 创建时间
      */
     private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 
     public Long getQuestionId() {
         return questionId;
@@ -113,6 +109,14 @@ public class QuestionInfo {
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public Integer getQuestionType() {
@@ -203,6 +207,14 @@ public class QuestionInfo {
         this.reviewUserId = reviewUserId;
     }
 
+    public String getReviewUserName() {
+        return reviewUserName;
+    }
+
+    public void setReviewUserName(String reviewUserName) {
+        this.reviewUserName = reviewUserName;
+    }
+
     public Date getReviewTime() {
         return reviewTime;
     }
@@ -219,19 +231,19 @@ public class QuestionInfo {
         this.createUserId = createUserId;
     }
 
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }
