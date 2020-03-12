@@ -89,6 +89,35 @@ public class QuestionInfoController {
     }
 
     /**
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @param courseId 课程ID
+     * @return
+     */
+    @RequestMapping(value = "/question/getReadyReviewByCourseId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getReadyReviewByCourseId(Long courseId) {
+        if (courseId == null) {
+            return MessageVo.fail("缺少课程ID参数！");
+        }
+        return questionInfoService.getReadyReviewByCourseId(courseId);
+    }
+
+    /**
+     * 根据id提交审核试题
+     * @param questionId 试题ID
+     * @return
+     */
+    @RequestMapping(value = "/question/submit", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo submit(Long questionId) {
+        if (questionId == null) {
+            return MessageVo.fail("缺少试题ID参数！");
+        }
+        return questionInfoService.submit(questionId);
+    }
+
+    /**
      * 分页查询
      * @param param
      * @return

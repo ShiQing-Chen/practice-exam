@@ -30,6 +30,22 @@ public interface QuestionInfoService {
      * @return
      */
     MessageVo getById(Long questionId);
+
+    /**
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @param courseId 课程ID
+     * @return
+     */
+    MessageVo getReadyReviewByCourseId(Long courseId);
+
+    /**
+     * 根据id提交审核试题
+     * @param questionId
+     * @return
+     */
+    MessageVo submit(Long questionId);
+
     /**
      * 根据id删除
      * @param questionId

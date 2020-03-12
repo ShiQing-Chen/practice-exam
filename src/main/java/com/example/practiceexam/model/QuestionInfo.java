@@ -13,6 +13,10 @@ import java.util.Date;
 @Entity
 @Table(name = "question_info")
 public class QuestionInfo {
+    public final static int STATUS_PASS = 4;
+    public final static int STATUS_NOT_PASS = 3;
+    public final static int STATUS_READY_REVIEW = 2;
+    public final static int STATUS_DRAFT = 1;
     /**
      * 试题ID
      */

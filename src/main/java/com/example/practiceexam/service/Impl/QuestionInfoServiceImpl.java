@@ -102,6 +102,57 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
     }
 
     /**
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @param courseId 课程ID
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getReadyReviewByCourseId(Long courseId) {
+        if (courseId != null) {
+            QuestionInfo questionInfo = questionInfoDao.getReadyReviewByCourseId(courseId);
+            if (questionInfo != null) {
+                return MessageVo.success(questionInfo);
+            } else {
+                return MessageVo.fail("题库的试题已经审核完，暂无待审试题！");
+            }
+        }
+        return MessageVo.fail("获取试题失败！");
+    }
+
+    /**
+     * 根据id提交审核试题
+     * @param questionId
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo submit(Long questionId) {
+        if (questionId != null) {
+            QuestionInfo questionInfo = questionInfoDao.getById(questionId);
+            if (questionInfo != null) {
+                // 判断试题状态，是否为草稿或审核不通过
+                Integer quesStatus = questionInfo.getQuestionStatus();
+                if (quesStatus != null) {
+                    if (quesStatus.equals(QuestionInfo.STATUS_PASS)) {
+                        return MessageVo.fail("提交审核失败，该试题已被审核通过！");
+                    } else if (quesStatus.equals(QuestionInfo.STATUS_READY_REVIEW)) {
+                        return MessageVo.fail("提交审核失败，该试题已提交审核！");
+                    }
+                } else {
+                    return MessageVo.fail("该试题数据异常，不存在试题状态！");
+                }
+                questionInfo.setQuestionStatus(QuestionInfo.STATUS_READY_REVIEW);
+                questionInfo.setUpdateTime(new Date());
+                questionInfoDao.save(questionInfo);
+                return MessageVo.success();
+            }
+        }
+        return MessageVo.fail("提交审核试题失败！");
+    }
+
+    /**
      * 根据id删除
      * @param questionId
      * @return

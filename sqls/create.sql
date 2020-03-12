@@ -203,3 +203,18 @@ CREATE TABLE `question_info` (
     key `idx_question_difficulty` (`question_difficulty`),
     key `idx_create_user_id` (`create_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试题信息表';
+
+
+DROP TABLE IF EXISTS `question_review_log`;
+
+CREATE TABLE `question_review_log` (
+  `review_id` bigint(20) NOT NULL COMMENT '审核记录ID',
+  `question_id` bigint(20) NOT NULL COMMENT '试题ID',
+  `review_result` smallint(6) NOT NULL COMMENT '审核结果 1通过 2不通过',
+  `review_opinion` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '审核意见',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`review_id`),
+    key `idx_question_id` (`question_id`),
+    key `idx_create_user_id` (`create_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试题审核记录';

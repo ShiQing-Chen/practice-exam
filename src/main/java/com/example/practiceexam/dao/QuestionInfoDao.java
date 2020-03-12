@@ -26,4 +26,13 @@ public interface QuestionInfoDao extends JpaRepository<QuestionInfo, Long>, Ques
     @Modifying
     @Query(value = "delete from question_info where question_id = ?1 ", nativeQuery = true)
     int delById(Long questionId);
+
+    /**
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @param courseId 课程ID
+     * @return
+     */
+    @Query(value = "select * from question_info where course_id = ?1 and question_status =2 order by rand() limit 1", nativeQuery = true)
+    QuestionInfo getReadyReviewByCourseId(Long courseId);
 }
