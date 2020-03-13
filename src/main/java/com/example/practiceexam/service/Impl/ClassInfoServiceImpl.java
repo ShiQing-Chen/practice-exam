@@ -217,11 +217,23 @@ public class ClassInfoServiceImpl implements ClassInfoService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public MessageVo initStudentClassById(Long classId) {
         if (classId != null) {
             List<ValueLabelDto> dtos = classInfoDao.initStudentClassById(classId);
             return MessageVo.success(dtos);
         }
         return MessageVo.success(Lists.newArrayList());
+    }
+
+    /**
+     * 获取班级列表
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getListClassIdName() {
+        List<ValueLabelDto> dtos = classInfoDao.getListClassIdName();
+        return MessageVo.success(dtos);
     }
 }

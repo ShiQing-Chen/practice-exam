@@ -218,3 +218,31 @@ CREATE TABLE `question_review_log` (
     key `idx_question_id` (`question_id`),
     key `idx_create_user_id` (`create_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试题审核记录';
+
+
+DROP TABLE IF EXISTS `paper_info`;
+
+CREATE TABLE `paper_info` (
+  `paper_id` bigint(20) NOT NULL COMMENT '试卷ID',
+  `paper_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '试卷名称',
+  `do_time` int DEFAULT NULL COMMENT '检测时长 (分钟)',
+  `paper_type` smallint(6) DEFAULT NULL COMMENT '试卷类型 1考试 2测试 3练习',
+  `paper_status` smallint(6) DEFAULT 1 COMMENT '试卷状态 1草稿 2发布',
+  `publish_user_id` bigint(20) DEFAULT NULL COMMENT '发布用户id',
+  `publish_time` datetime DEFAULT NULL COMMENT '发布时间',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`paper_id`),
+    key `idx_paper_type` (`paper_type`),
+    key `idx_paper_status` (`paper_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试卷信息表';
+
+DROP TABLE IF EXISTS `paper_class`;
+CREATE TABLE `paper_class` (
+  `id` bigint(20) NOT NULL COMMENT 'ID',
+  `paper_id` bigint(20) NOT NULL COMMENT '试卷ID',
+  `class_id` bigint(20) NOT NULL COMMENT '班级ID',
+    PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_paper_class` (`paper_id`,`class_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试卷班级关系表';

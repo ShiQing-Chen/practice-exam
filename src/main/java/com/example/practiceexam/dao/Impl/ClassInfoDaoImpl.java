@@ -34,7 +34,7 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
      * @param classParam
      * @return
      */
-    @SuppressWarnings({"unchecked", "Duplicates" })
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
     public List<ClassDto> adminGetListByPage(SearchClassParam classParam) {
         if (classParam == null) {
@@ -86,7 +86,7 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
      * @param classParam
      * @return
      */
-    @SuppressWarnings({"unchecked", "Duplicates" })
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
     public Integer adminGetCountByPage(SearchClassParam classParam) {
         if (classParam == null) {
@@ -124,7 +124,7 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
      * 模糊查询班级
      * @return
      */
-    @SuppressWarnings({"unchecked", "Duplicates" })
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
     public List<ValueLabelDto> searchListClassName(String search) {
         if (StringUtils.isBlank(search)) {
@@ -162,6 +162,24 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
         query.addScalar("value", StandardBasicTypes.LONG)
                 .addScalar("label", StandardBasicTypes.STRING);
         query.setParameter("classId", classId);
+        query.setFirstResult(0);
+        query.setMaxResults(20);
+        query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(ValueLabelDto.class));
+        return query.list();
+    }
+
+    /**
+     * 获取班级列表
+     * @return
+     */
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public List<ValueLabelDto> getListClassIdName() {
+        Session session = entityManager.unwrap(Session.class);
+        String sqlSb = " select c.class_id value, concat(c.grade,'-',c.major_name,'-',c.class_name) label from class_info c ";
+        NativeQuery query = session.createSQLQuery(sqlSb);
+        query.addScalar("value", StandardBasicTypes.LONG)
+                .addScalar("label", StandardBasicTypes.STRING);
         query.setFirstResult(0);
         query.setMaxResults(20);
         query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(ValueLabelDto.class));

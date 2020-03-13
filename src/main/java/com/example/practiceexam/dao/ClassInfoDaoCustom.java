@@ -40,4 +40,10 @@ public interface ClassInfoDaoCustom {
      * @return
      */
     List<ValueLabelDto> initStudentClassById(Long classId);
+
+    /**
+     * 获取班级列表
+     * @return
+     */
+    List<ValueLabelDto> getListClassIdName();
 }

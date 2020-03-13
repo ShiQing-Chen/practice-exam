@@ -78,4 +78,10 @@ public interface ClassInfoService {
      * @return
      */
     MessageVo initStudentClassById(Long classId);
+
+    /**
+     * 获取班级列表
+     * @return
+     */
+    MessageVo getListClassIdName();
 }

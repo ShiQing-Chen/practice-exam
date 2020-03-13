@@ -173,4 +173,14 @@ public class ClassInfoController {
         }
         return classInfoService.initStudentClassById(classId);
     }
+
+    /**
+     * 获取班级列表
+     * @return
+     */
+    @RequestMapping(value = "/class/getListClassIdName", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getListClassIdName() {
+        return classInfoService.getListClassIdName();
+    }
 }
