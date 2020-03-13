@@ -5,6 +5,9 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddStudentForm;
 import com.example.practiceexam.form.UpdateStudentForm;
 import com.example.practiceexam.param.SearchStudentParam;
+import com.example.practiceexam.vo.AddStudentVo;
+
+import java.util.List;
 
 /**
  * @author ShiQing_Chen  2020/3/5  18:00
@@ -54,10 +57,18 @@ public interface StudentInfoService {
      * @return
      */
     MessageVo checkStudentNumberById(Long studentId, String studentNumber);
+
     /**
      * 分页查询
      * @param studentParam
      * @return
      */
     MessageVo getListByPage(SearchStudentParam studentParam);
+
+    /**
+     * 批量添加学生
+     * @param studentVoList
+     * @return
+     */
+    MessageVo addSome(SharedUser sharedUser, List<AddStudentVo> studentVoList);
 }

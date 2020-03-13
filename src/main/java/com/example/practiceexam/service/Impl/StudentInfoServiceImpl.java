@@ -13,6 +13,7 @@ import com.example.practiceexam.model.StudentInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.example.practiceexam.service.StudentInfoService;
+import com.example.practiceexam.vo.AddStudentVo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -241,5 +243,61 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         } else {
             return MessageVo.success(Lists.newArrayList());
         }
+    }
+
+    /**
+     * 批量添加学生
+     * @param studentVoList
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo addSome(SharedUser sharedUser, List<AddStudentVo> studentVoList) {
+        if (sharedUser != null && !CollectionUtils.isEmpty(studentVoList)) {
+            List<UserInfo> userList = Lists.newArrayList();
+            List<StudentInfo> studentList = Lists.newArrayList();
+            List<String> errList = Lists.newArrayList();
+            for (AddStudentVo studentVo : studentVoList) {
+                //查看学号是否已经存在
+                if (studentInfoDao.checkStudentNumber(studentVo.getStudentNumber()) > 0) {
+                    errList.add("（" + studentVo.getStudentNumber() + "学号已被使用）");
+                    continue;
+                }
+                // 校验学号是否可以作为登录账号
+                if (userInfoDao.checkLoginName(studentVo.getStudentNumber()) > 0) {
+                    errList.add("（" + studentVo.getStudentNumber() + "学号已被使用为登录账号）");
+                    continue;
+                }
+                Date curDate = new Date();
+                // 用户信息
+                UserInfo user = new UserInfo();
+                user.setUserId(IdGeneratorUtils.getNewId());
+                user.setNickName(studentVo.getStudentName());
+                user.setLoginName(studentVo.getStudentNumber());
+                user.setLoginPass(passwordEncoder.encode(studentVo.getStudentNumber()));
+                user.setUserType(UserInfo.TYPE_STUDENT);
+                user.setGender(studentVo.getGender());
+                user.setCreateTime(curDate);
+                user.setUpdateTime(curDate);
+                userList.add(user);
+                // 学生信息
+                StudentInfo studentInfo = new StudentInfo();
+                BeanUtils.copyProperties(studentVo, studentInfo);
+                studentInfo.setStudentId(IdGeneratorUtils.getNewId());
+                studentInfo.setCreateTime(curDate);
+                studentInfo.setUpdateTime(curDate);
+                studentInfo.setCreateUserId(sharedUser.getUserId());
+                studentInfo.setUserId(user.getUserId());
+                studentList.add(studentInfo);
+            }
+            if (!CollectionUtils.isEmpty(userList)) {
+                userInfoDao.saveAll(userList);
+            }
+            if (!CollectionUtils.isEmpty(studentList)) {
+                studentInfoDao.saveAll(studentList);
+            }
+            return MessageVo.success(errList);
+        }
+        return MessageVo.fail("导入失败！");
     }
 }
