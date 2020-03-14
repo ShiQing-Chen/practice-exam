@@ -258,7 +258,6 @@ CREATE TABLE `paper_generate` (
   `order_number` int DEFAULT NULL COMMENT '试题序号',
   `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`generate_id`),
     key `idx_paper_id` (`paper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '组卷信息表';

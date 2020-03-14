@@ -5,6 +5,7 @@ import com.example.common.util.BindingResultUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddQuesForm;
 import com.example.practiceexam.form.UpdateQuesForm;
+import com.example.practiceexam.param.GenerateSearchQuesParam;
 import com.example.practiceexam.param.SearchQuesParam;
 import com.example.practiceexam.service.QuestionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,6 +133,38 @@ public class QuestionInfoController {
             return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return questionInfoService.getListByPage(param);
+    }
+
+    /**
+     * 组卷关系获取试题
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/question/generate/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo generateGetListByPage(SharedUser sharedUser, @RequestBody @Valid GenerateSearchQuesParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取试题数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return questionInfoService.generateGetListByPage(sharedUser, param);
+    }
+
+    /**
+     * 根据试卷ID获取试题
+     * @param paperId
+     * @return
+     */
+    @RequestMapping(value = "/question/generate/getQuesListByPaperId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getQuesListByPaperId(Long paperId) {
+        if (paperId == null) {
+            return MessageVo.fail("缺少试卷ID参数！");
+        }
+        return questionInfoService.getQuesListByPaperId(paperId);
     }
 
 }

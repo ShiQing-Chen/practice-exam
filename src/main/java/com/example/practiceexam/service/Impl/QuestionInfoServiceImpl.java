@@ -3,12 +3,18 @@ package com.example.practiceexam.service.Impl;
 import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
+import com.example.practiceexam.dao.PaperGenerateDao;
+import com.example.practiceexam.dao.PaperInfoDao;
 import com.example.practiceexam.dao.QuestionInfoDao;
+import com.example.practiceexam.dto.GenerateQuesDto;
 import com.example.practiceexam.dto.QuesDto;
 import com.example.practiceexam.form.AddQuesForm;
 import com.example.practiceexam.form.UpdateQuesForm;
+import com.example.practiceexam.model.PaperGenerate;
+import com.example.practiceexam.model.PaperInfo;
 import com.example.practiceexam.model.QuestionInfo;
 import com.example.practiceexam.model.UserInfo;
+import com.example.practiceexam.param.GenerateSearchQuesParam;
 import com.example.practiceexam.param.SearchQuesParam;
 import com.example.practiceexam.service.QuestionInfoService;
 import com.example.practiceexam.utils.DateCodeUtil;
@@ -18,7 +24,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +39,10 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
 
     @Autowired
     private QuestionInfoDao questionInfoDao;
+    @Autowired
+    private PaperInfoDao paperInfoDao;
+    @Autowired
+    private PaperGenerateDao paperGenerateDao;
 
     /**
      * 添加
@@ -187,5 +199,68 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
         } else {
             return MessageVo.success(Lists.newArrayList());
         }
+    }
+
+    /**
+     * 组卷关系获取试题
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo generateGetListByPage(SharedUser sharedUser, GenerateSearchQuesParam param) {
+        if (param != null && sharedUser != null) {
+            // 如果查询我的试题，则添加创建人ID参数
+            if (param.getQuestionSource() != null && param.getQuestionSource().equals(2)) {
+                param.setCreateUserId(sharedUser.getUserId());
+            } else {
+                // 来源未知则设置为题库
+                param.setQuestionSource(1);
+                // 来源未知或者题库的则必须只查询已发布的
+                param.setQuestionStatus(4);
+            }
+            // 根据试卷ID查找课程ID
+            if (param.getPaperId() != null) {
+                PaperInfo paperInfo = paperInfoDao.getById(param.getPaperId());
+                if (paperInfo != null) {
+                    param.setCourseId(paperInfo.getCourseId());
+                }
+            }
+            List<GenerateQuesDto> list = questionInfoDao.generateGetListByPage(param);
+            Integer count = questionInfoDao.generateGetCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 根据试卷ID获取试题
+     * @param paperId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getQuesListByPaperId(Long paperId) {
+        if (paperId != null) {
+            Map<String, Object> map = Maps.newHashMap();
+            List<QuestionInfo> questionInfoList = questionInfoDao.getQuesListByPaperId(paperId);
+            if (CollectionUtils.isEmpty(questionInfoList)) {
+                map.put("list", Lists.newArrayList());
+            } else {
+                map.put("list", questionInfoList);
+            }
+            // 获取分数
+            BigDecimal choiceScore = paperGenerateDao.getChoiceScoreByPaperId(paperId);
+            BigDecimal subjectiveScore = paperGenerateDao.getSubjectiveScoreByPaperId(paperId);
+            map.put("choiceScore", choiceScore);
+            map.put("subjectiveScore", subjectiveScore);
+            return MessageVo.success(map);
+        }
+        return MessageVo.fail("获取试题错误！");
     }
 }

@@ -1,7 +1,9 @@
 package com.example.practiceexam.form;
 
+import com.example.practiceexam.dto.GenerateQuesDto;
 import com.google.common.collect.Lists;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +20,8 @@ public class AddPaperGenerateForm {
     /**
      * 试题ID
      */
-    private List<Long> quesIdList = Lists.newArrayList();
+    @NotEmpty(message = "试题不能为空！")
+    private List<GenerateQuesDto> quesList = Lists.newArrayList();
     /**
      * 试题分数
      * 选择题
@@ -30,7 +33,7 @@ public class AddPaperGenerateForm {
      * 非选择题
      */
     @NotNull(message = "非选择题分数不能为空！")
-    private BigDecimal subjectivScore;
+    private BigDecimal subjectiveScore;
 
 
     public Long getPaperId() {
@@ -41,12 +44,12 @@ public class AddPaperGenerateForm {
         this.paperId = paperId;
     }
 
-    public List<Long> getQuesIdList() {
-        return quesIdList;
+    public List<GenerateQuesDto> getQuesList() {
+        return quesList;
     }
 
-    public void setQuesIdList(List<Long> quesIdList) {
-        this.quesIdList = quesIdList;
+    public void setQuesList(List<GenerateQuesDto> quesList) {
+        this.quesList = quesList;
     }
 
     public BigDecimal getChoiceScore() {
@@ -57,11 +60,11 @@ public class AddPaperGenerateForm {
         this.choiceScore = choiceScore;
     }
 
-    public BigDecimal getSubjectivScore() {
-        return subjectivScore;
+    public BigDecimal getSubjectiveScore() {
+        return subjectiveScore;
     }
 
-    public void setSubjectivScore(BigDecimal subjectivScore) {
-        this.subjectivScore = subjectivScore;
+    public void setSubjectiveScore(BigDecimal subjectiveScore) {
+        this.subjectiveScore = subjectiveScore;
     }
 }

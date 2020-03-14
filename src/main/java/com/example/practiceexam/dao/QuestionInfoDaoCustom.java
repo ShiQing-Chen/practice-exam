@@ -1,6 +1,8 @@
 package com.example.practiceexam.dao;
 
+import com.example.practiceexam.dto.GenerateQuesDto;
 import com.example.practiceexam.dto.QuesDto;
+import com.example.practiceexam.param.GenerateSearchQuesParam;
 import com.example.practiceexam.param.SearchQuesParam;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +26,20 @@ public interface QuestionInfoDaoCustom {
      * @return
      */
     Integer getCountByPage(SearchQuesParam param);
+
+    /**
+     * 组卷关系获取试题
+     * 分页查询
+     * @param param
+     * @return
+     */
+    List<GenerateQuesDto> generateGetListByPage(GenerateSearchQuesParam param);
+
+    /**
+     * 组卷关系获取试题
+     * 分页查询
+     * @param param
+     * @return
+     */
+    Integer generateGetCountByPage(GenerateSearchQuesParam param);
 }

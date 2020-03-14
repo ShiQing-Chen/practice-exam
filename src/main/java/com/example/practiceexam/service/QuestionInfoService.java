@@ -4,6 +4,7 @@ import com.example.common.cache.SharedUser;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddQuesForm;
 import com.example.practiceexam.form.UpdateQuesForm;
+import com.example.practiceexam.param.GenerateSearchQuesParam;
 import com.example.practiceexam.param.SearchQuesParam;
 
 /**
@@ -59,4 +60,19 @@ public interface QuestionInfoService {
      * @return
      */
     MessageVo getListByPage(SearchQuesParam param);
+
+    /**
+     * 组卷关系获取试题
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo generateGetListByPage(SharedUser sharedUser, GenerateSearchQuesParam param);
+
+    /**
+     * 根据试卷ID获取试题
+     * @param paperId
+     * @return
+     */
+    MessageVo getQuesListByPaperId(Long paperId);
 }
