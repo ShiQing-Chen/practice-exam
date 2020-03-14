@@ -167,4 +167,20 @@ public class QuestionInfoController {
         return questionInfoService.getQuesListByPaperId(paperId);
     }
 
+    /**
+     * 自动组卷
+     * 随机获取
+     * 25个选择题，5个非选择题
+     * @param paperId
+     * @return
+     */
+    @RequestMapping(value = "/question/generate/autoGetQuesList", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo autoGetQuesList(Long paperId) {
+        if (paperId == null) {
+            return MessageVo.fail("缺少试卷ID参数！");
+        }
+        return questionInfoService.autoGetQuesList(paperId);
+    }
+
 }

@@ -48,4 +48,15 @@ public interface QuestionInfoDao extends JpaRepository<QuestionInfo, Long>, Ques
             "where pg.paper_id=?1 order by pg.order_number", nativeQuery = true)
     List<QuestionInfo> getQuesListByPaperId(Long paperId);
 
+    /**
+     * 随机获取到某课程下
+     * 已经审核的试题
+     * @param courseId 课程ID
+     * @param questionType 试题类型
+     * @param size 试题数量
+     * @return
+     */
+    @Query(value = "select * from question_info where course_id = ?1 and question_status =4 and question_type =?2 order by rand() limit ?3", nativeQuery = true)
+    List<QuestionInfo> getRandByCourseId(Long courseId, Integer questionType, Integer size);
+
 }

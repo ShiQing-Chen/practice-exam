@@ -75,4 +75,13 @@ public interface QuestionInfoService {
      * @return
      */
     MessageVo getQuesListByPaperId(Long paperId);
+
+    /**
+     * 自动组卷
+     * 随机获取
+     * 25个选择题，5个非选择题
+     * @param paperId
+     * @return
+     */
+    MessageVo autoGetQuesList(Long paperId);
 }

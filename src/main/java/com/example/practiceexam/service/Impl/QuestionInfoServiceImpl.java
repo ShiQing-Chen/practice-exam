@@ -10,7 +10,6 @@ import com.example.practiceexam.dto.GenerateQuesDto;
 import com.example.practiceexam.dto.QuesDto;
 import com.example.practiceexam.form.AddQuesForm;
 import com.example.practiceexam.form.UpdateQuesForm;
-import com.example.practiceexam.model.PaperGenerate;
 import com.example.practiceexam.model.PaperInfo;
 import com.example.practiceexam.model.QuestionInfo;
 import com.example.practiceexam.model.UserInfo;
@@ -262,5 +261,40 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
             return MessageVo.success(map);
         }
         return MessageVo.fail("获取试题错误！");
+    }
+
+    /**
+     * 自动组卷
+     * 随机获取
+     * 25个选择题，5个非选择题
+     * @param paperId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo autoGetQuesList(Long paperId) {
+        if (paperId != null) {
+            PaperInfo paperInfo = paperInfoDao.getById(paperId);
+            if (paperInfo != null) {
+                if (paperInfo.getCourseId() == null) {
+                    return MessageVo.fail("当前试卷未绑定课程，请绑定后重新组卷！");
+                }
+                List<QuestionInfo> quesList = Lists.newArrayList();
+                List<QuestionInfo> choiceQues = questionInfoDao.getRandByCourseId(paperInfo.getCourseId(), 1, 25);
+                List<QuestionInfo> subjectiveQues = questionInfoDao.getRandByCourseId(paperInfo.getCourseId(), 2, 5);
+                if (!CollectionUtils.isEmpty(choiceQues)) {
+                    quesList.addAll(choiceQues);
+                }
+                if (!CollectionUtils.isEmpty(subjectiveQues)) {
+                    quesList.addAll(subjectiveQues);
+                }
+                if (!CollectionUtils.isEmpty(quesList)) {
+                    return MessageVo.success(quesList);
+                } else {
+                    return MessageVo.fail("试题库内未查询到合适的试题进行组卷！");
+                }
+            }
+        }
+        return MessageVo.fail("自动组卷错误！为获取试卷ID！");
     }
 }
