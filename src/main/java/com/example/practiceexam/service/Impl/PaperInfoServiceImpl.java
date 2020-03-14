@@ -4,6 +4,7 @@ import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.PaperClassDao;
+import com.example.practiceexam.dao.PaperGenerateDao;
 import com.example.practiceexam.dao.PaperInfoDao;
 import com.example.practiceexam.dto.PaperDto;
 import com.example.practiceexam.dto.PaperInfoDto;
@@ -11,6 +12,7 @@ import com.example.practiceexam.form.AddPaperForm;
 import com.example.practiceexam.form.UpdatePaperForm;
 import com.example.practiceexam.model.PaperClass;
 import com.example.practiceexam.model.PaperInfo;
+import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.param.SearchPaperParam;
 import com.example.practiceexam.service.PaperInfoService;
 import com.google.common.collect.Lists;
@@ -34,6 +36,8 @@ public class PaperInfoServiceImpl implements PaperInfoService {
     private PaperClassDao paperClassDao;
     @Autowired
     private PaperInfoDao paperInfoDao;
+    @Autowired
+    private PaperGenerateDao paperGenerateDao;
 
     /**
      * 添加
@@ -48,6 +52,13 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             Date curDate = new Date();
             BeanUtils.copyProperties(form, paperInfo);
             paperInfo.setPaperId(IdGeneratorUtils.getNewId());
+            // 如果为教师则使用自身的课程ID
+            if (sharedUser.getUserType().equals(UserInfo.TYPE_TEACHER)) {
+                if (sharedUser.getCourseId() == null) {
+                    return MessageVo.fail("添加试卷失败，当前教师未绑定任何课程！");
+                }
+                paperInfo.setCourseId(sharedUser.getCourseId());
+            }
             paperInfo.setCreateUserId(sharedUser.getUserId());
             paperInfo.setCreateTime(curDate);
             paperInfo.setUpdateTime(curDate);
@@ -83,6 +94,13 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             }
             Date curDate = new Date();
             BeanUtils.copyProperties(form, paperInfo);
+            // 如果为教师则使用自身的课程ID
+            if (sharedUser.getUserType().equals(UserInfo.TYPE_TEACHER)) {
+                if (sharedUser.getCourseId() == null) {
+                    return MessageVo.fail("修改试卷失败，当前教师未绑定任何课程！");
+                }
+                paperInfo.setCourseId(sharedUser.getCourseId());
+            }
             paperInfo.setUpdateTime(curDate);
             paperInfoDao.save(paperInfo);
             paperClassDao.delByPaperId(paperInfo.getPaperId());
@@ -135,6 +153,7 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             int result = paperInfoDao.delById(paperId);
             if (result > 0) {
                 paperClassDao.delByPaperId(paperId);
+                paperGenerateDao.delByPaperId(paperId);
                 return MessageVo.success();
             }
         }
@@ -187,5 +206,27 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             return MessageVo.success("试卷发布成功!");
         }
         return MessageVo.fail("发布试卷失败！");
+    }
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, SearchPaperParam param) {
+        if (param != null && sharedUser != null) {
+            param.setCreateUserId(sharedUser.getUserId());
+            List<PaperInfoDto> list = paperInfoDao.getListByPage(param);
+            Integer count = paperInfoDao.getCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
     }
 }

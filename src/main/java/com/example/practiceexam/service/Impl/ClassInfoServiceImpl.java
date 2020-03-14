@@ -288,4 +288,22 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         }
         return MessageVo.fail("添加班级失败！");
     }
+
+    /**
+     * 教师
+     * 获取班级列表
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo teacherGetListClassIdName(SharedUser sharedUser) {
+        if (sharedUser != null) {
+            if (sharedUser.getTeacherId() == null) {
+                return MessageVo.fail("当前用户未获取到教师信息！");
+            }
+            List<ValueLabelDto> dtos = classInfoDao.teacherGetListClassIdName(sharedUser.getTeacherId());
+            return MessageVo.success(dtos);
+        }
+        return MessageVo.fail("获取班级列表失败!");
+    }
 }

@@ -39,6 +39,7 @@ public interface PaperInfoService {
     MessageVo delById(Long paperId);
 
     /**
+     * 管理员
      * 分页查询
      * @param param
      * @return
@@ -52,4 +53,12 @@ public interface PaperInfoService {
      * @return
      */
     MessageVo publicPaper(SharedUser sharedUser, Long paperId);
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo teacherGetListByPage(SharedUser sharedUser, SearchPaperParam param);
 }

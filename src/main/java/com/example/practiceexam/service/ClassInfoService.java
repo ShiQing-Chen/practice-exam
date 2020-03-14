@@ -101,4 +101,11 @@ public interface ClassInfoService {
      * @return
      */
     MessageVo addByTeacher(SharedUser sharedUser, AddClassForm classForm);
+
+    /**
+     * 教师
+     * 获取班级列表
+     * @return
+     */
+    MessageVo teacherGetListClassIdName(SharedUser sharedUser);
 }

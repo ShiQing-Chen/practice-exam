@@ -2,6 +2,7 @@ package com.example.practiceexam.dao;
 
 import com.example.practiceexam.model.PaperGenerate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
@@ -32,4 +33,13 @@ public interface PaperGenerateDao extends JpaRepository<PaperGenerate, Long> {
             "where pg.paper_id = ?1 and q.question_type = 2 and pg.question_score is not null and pg.question_score <>0 " +
             "group by pg.question_score", nativeQuery = true)
     BigDecimal getSubjectiveScoreByPaperId(Long paperId);
+
+    /**
+     * 根据paperId删除
+     * @param paperId 试卷ID
+     * @return
+     */
+    @Modifying
+    @Query(value = "delete from paper_generate where paper_id = ?1 ", nativeQuery = true)
+    int delByPaperId(Long paperId);
 }

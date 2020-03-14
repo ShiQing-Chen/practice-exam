@@ -61,6 +61,6 @@ public interface TeacherInfoDao extends JpaRepository<TeacherInfo, Long>, Teache
      * @param userId 用户ID
      * @return
      */
-    @Query(value = "select t.teacher_id from teacher_info t where t.user_id = ?1 ", nativeQuery = true)
-    Long getTeacherIdByUserId(Long userId);
+    @Query(value = "select t.* from teacher_info t where t.user_id = ?1 ", nativeQuery = true)
+    TeacherInfo getTeacherByUserId(Long userId);
 }

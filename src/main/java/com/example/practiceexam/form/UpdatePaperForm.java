@@ -12,7 +12,6 @@ public class UpdatePaperForm {
     /**
      * 课程ID
      */
-    @NotNull(message = "课程ID不能为空！")
     private Long courseId;
     /**
      * 试卷ID

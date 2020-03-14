@@ -41,6 +41,7 @@ public class PaperGenerateServiceImpl implements PaperGenerateService {
             List<GenerateQuesDto> quesList = generateForm.getQuesList();
             Date curDate = new Date();
             if (!CollectionUtils.isEmpty(quesList)) {
+                paperGenerateDao.delByPaperId(generateForm.getPaperId());
                 List<PaperGenerate> generateList = Lists.newArrayList();
                 int i = 1;
                 for (GenerateQuesDto quesDto : quesList) {

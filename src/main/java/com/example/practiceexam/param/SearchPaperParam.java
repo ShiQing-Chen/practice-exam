@@ -25,6 +25,10 @@ public class SearchPaperParam {
      * 试卷状态 1草稿 2发布
      */
     private Integer paperStatus;
+    /**
+     * 创建用户id
+     */
+    private Long createUserId;
 
     public String getSort() {
         return sort;
@@ -88,5 +92,13 @@ public class SearchPaperParam {
 
     public void setPaperStatus(Integer paperStatus) {
         this.paperStatus = paperStatus;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 }

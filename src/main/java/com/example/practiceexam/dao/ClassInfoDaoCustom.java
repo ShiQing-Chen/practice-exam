@@ -44,4 +44,11 @@ public interface ClassInfoDaoCustom {
      * @return
      */
     List<ValueLabelDto> getListClassIdName();
+
+    /**
+     * 教师
+     * 获取班级列表
+     * @return
+     */
+    List<ValueLabelDto> teacherGetListClassIdName(Long teacherId);
 }

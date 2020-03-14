@@ -219,4 +219,18 @@ public class ClassInfoController {
         }
         return classInfoService.addByTeacher(sharedUser, classForm);
     }
+
+    /**
+     * 教师
+     * 获取班级列表
+     * @return
+     */
+    @RequestMapping(value = "/class/teacher/getListClassIdName", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo teacherGetListClassIdName(SharedUser sharedUser) {
+        if (sharedUser==null){
+            return MessageVo.fail("请登录后重试！");
+        }
+        return classInfoService.teacherGetListClassIdName(sharedUser);
+    }
 }

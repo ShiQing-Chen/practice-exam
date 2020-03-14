@@ -197,4 +197,28 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
         query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(ValueLabelDto.class));
         return query.list();
     }
+
+    /**
+     * 教师
+     * 获取班级列表
+     * @return
+     */
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public List<ValueLabelDto> teacherGetListClassIdName(Long teacherId) {
+        if (teacherId==null){
+            return Lists.newArrayList();
+        }
+        Session session = entityManager.unwrap(Session.class);
+        String sqlSb = " select c.class_id value, concat(c.grade,'-',c.major_name,'-',c.class_name) label " +
+                "from class_info c where c.teacher_id = :teacherId";
+        NativeQuery query = session.createSQLQuery(sqlSb);
+        query.addScalar("value", StandardBasicTypes.LONG)
+                .addScalar("label", StandardBasicTypes.STRING);
+        query.setParameter("teacherId", teacherId);
+        query.setFirstResult(0);
+        query.setMaxResults(20);
+        query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(ValueLabelDto.class));
+        return query.list();
+    }
 }

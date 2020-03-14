@@ -89,6 +89,7 @@ public class PaperInfoController {
     }
 
     /**
+     * 管理员
      * 分页查询
      * @param param
      * @return
@@ -120,5 +121,23 @@ public class PaperInfoController {
             return MessageVo.fail("请登录后重试");
         }
         return paperInfoService.publicPaper(sharedUser, paperId);
+    }
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/paper/teacher/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchPaperParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取试卷数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return paperInfoService.teacherGetListByPage(sharedUser, param);
     }
 }

@@ -5,10 +5,8 @@ import com.example.common.util.JwtTokenUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.config.OnlineUserManager;
 import com.example.practiceexam.config.RoleManager;
-import com.example.practiceexam.dao.MessageInfoDao;
-import com.example.practiceexam.dao.StudentInfoDao;
-import com.example.practiceexam.dao.TeacherInfoDao;
-import com.example.practiceexam.dao.UserInfoDao;
+import com.example.practiceexam.dao.*;
+import com.example.practiceexam.model.StudentInfo;
 import com.example.practiceexam.model.TeacherInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.service.ApiLoginService;
@@ -51,6 +49,8 @@ public class ApiLoginServiceImpl implements ApiLoginService {
     private TeacherInfoDao teacherInfoDao;
     @Autowired
     private StudentInfoDao studentInfoDao;
+    @Autowired
+    private CourseInfoDao courseInfoDao;
 
     @Value("${jwt.secretKey}")
     private String jwtSecretKey;
@@ -208,15 +208,16 @@ public class ApiLoginServiceImpl implements ApiLoginService {
         if (sharedUser.getUserType() != null) {
             if (sharedUser.getUserType().equals(UserInfo.TYPE_TEACHER)) {
                 // 补充教师信息
-                Long teacherId = teacherInfoDao.getTeacherIdByUserId(sharedUser.getUserId());
-                if (teacherId != null) {
-                    sharedUser.setTeacherId(teacherId);
+                TeacherInfo teacherInfo = teacherInfoDao.getTeacherByUserId(sharedUser.getUserId());
+                if (teacherInfo != null) {
+                    sharedUser.setTeacherId(teacherInfo.getTeacherId());
+                    sharedUser.setCourseId(teacherInfo.getCourseId());
                 }
             } else if (sharedUser.getUserType().equals(UserInfo.TYPE_STUDENT)) {
                 // 补充学生信息
-                Long studentId = studentInfoDao.getStudentIdByUserId(sharedUser.getUserId());
-                if (studentId != null) {
-                    sharedUser.setStudentId(studentId);
+                StudentInfo studentInfo = studentInfoDao.getStudentByUserId(sharedUser.getUserId());
+                if (studentInfo != null) {
+                    sharedUser.setStudentId(studentInfo.getStudentId());
                 }
             }
         }

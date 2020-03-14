@@ -66,6 +66,10 @@ public class PaperInfoDaoImpl implements PaperInfoDaoCustom {
             sqlSb.append(" AND p.paper_status = :paperStatus ");
             paramMap.put("paperStatus", param.getPaperStatus());
         }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND p.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
+        }
         if ("desc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
             sqlSb.append(" order by ").append(param.getSort()).append(" desc");
         } else if ("asc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
@@ -126,6 +130,10 @@ public class PaperInfoDaoImpl implements PaperInfoDaoCustom {
         if (param.getPaperStatus() != null) {
             sqlSb.append(" AND p.paper_status = :paperStatus ");
             paramMap.put("paperStatus", param.getPaperStatus());
+        }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND p.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());
