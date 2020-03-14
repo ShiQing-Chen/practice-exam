@@ -11,6 +11,7 @@ import com.example.practiceexam.param.SearchClassParam;
  **/
 public interface ClassInfoService {
     /**
+     * 管理员
      * 添加班级
      * @param classForm
      * @return
@@ -84,4 +85,20 @@ public interface ClassInfoService {
      * @return
      */
     MessageVo getListClassIdName();
+
+    /**
+     * 教师
+     * 分页查询
+     * @param classParam
+     * @return
+     */
+    MessageVo teacherGetListByPage(SharedUser sharedUser, SearchClassParam classParam);
+
+    /**
+     * 教师
+     * 添加班级
+     * @param classForm
+     * @return
+     */
+    MessageVo addByTeacher(SharedUser sharedUser, AddClassForm classForm);
 }

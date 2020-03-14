@@ -29,21 +29,23 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
     private EntityManager entityManager;
 
     /**
-     * 管理员
      * 分页查询
      * @param classParam
      * @return
      */
     @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
-    public List<ClassDto> adminGetListByPage(SearchClassParam classParam) {
+    public List<ClassDto> getListByPage(SearchClassParam classParam) {
         if (classParam == null) {
             return Lists.newArrayList();
         }
         StringBuilder sqlSb = new StringBuilder();
         sqlSb.append(" select c.class_id classId, c.class_name className, c.grade grade, c.major_name majorName, ");
-        sqlSb.append(" c.teacher_id teacherId, t.teacher_name teacherName, c.student_num studentNum, c.create_time createTime ");
-        sqlSb.append(" FROM class_info c left join teacher_info t on c.teacher_id=t.teacher_id WHERE 1=1 ");
+        sqlSb.append(" c.teacher_id teacherId, t.teacher_name teacherName, count(s.student_id) studentNum, c.create_time createTime ");
+        sqlSb.append(" FROM class_info c ");
+        sqlSb.append(" left join teacher_info t on c.teacher_id=t.teacher_id ");
+        sqlSb.append(" left join student_info s on c.class_id = s.class_id ");
+        sqlSb.append(" WHERE 1=1 ");
 
         Map<String, Object> paramMap = Maps.newHashMap();
         if (StringUtils.isNotEmpty(classParam.getSearch())) {
@@ -54,6 +56,11 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
             sqlSb.append(" AND c.grade = :grade ");
             paramMap.put("grade", classParam.getGrade());
         }
+        if (classParam.getTeacherId() != null) {
+            sqlSb.append(" AND c.teacher_id = :teacherId ");
+            paramMap.put("teacherId", classParam.getTeacherId());
+        }
+        sqlSb.append(" group by c.class_id ");
         if ("desc".equals(classParam.getOrder()) && StringUtils.isNotBlank(classParam.getSort())) {
             sqlSb.append(" order by ").append(classParam.getSort()).append(" desc");
         } else if ("asc".equals(classParam.getOrder()) && StringUtils.isNotBlank(classParam.getSort())) {
@@ -81,20 +88,21 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
     }
 
     /**
-     * 管理员
      * 分页查询
      * @param classParam
      * @return
      */
     @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
-    public Integer adminGetCountByPage(SearchClassParam classParam) {
+    public Integer getCountByPage(SearchClassParam classParam) {
         if (classParam == null) {
             return 0;
         }
         StringBuilder sqlSb = new StringBuilder();
         sqlSb.append(" SELECT COUNT(c.class_id) count ");
-        sqlSb.append(" FROM class_info c left join teacher_info t on c.teacher_id=t.teacher_id WHERE 1=1 ");
+        sqlSb.append(" FROM class_info c ");
+        sqlSb.append(" left join teacher_info t on c.teacher_id=t.teacher_id ");
+        sqlSb.append(" WHERE 1=1 ");
 
         Map<String, Object> paramMap = Maps.newHashMap();
         if (StringUtils.isNotEmpty(classParam.getSearch())) {
@@ -104,6 +112,10 @@ public class ClassInfoDaoImpl implements ClassInfoDaoCustom {
         if (classParam.getGrade() != null) {
             sqlSb.append(" AND c.grade = :grade ");
             paramMap.put("grade", classParam.getGrade());
+        }
+        if (classParam.getTeacherId() != null) {
+            sqlSb.append(" AND c.teacher_id = :teacherId ");
+            paramMap.put("teacherId", classParam.getTeacherId());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());

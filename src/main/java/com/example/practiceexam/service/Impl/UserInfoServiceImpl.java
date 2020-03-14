@@ -86,6 +86,13 @@ public class UserInfoServiceImpl implements UserInfoService {
             user.setCreateTime(curDate);
             user.setUpdateTime(curDate);
             UserInfo result = userInfoDao.save(user);
+            if (user.getUserType() != null) {
+                if (user.getUserType().equals(UserInfo.TYPE_TEACHER)) {
+
+                } else if (user.getUserType().equals(UserInfo.TYPE_STUDENT)) {
+
+                }
+            }
             return MessageVo.success(result);
         }
         return MessageVo.fail("添加用户失败！");

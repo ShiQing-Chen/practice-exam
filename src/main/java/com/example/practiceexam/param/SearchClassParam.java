@@ -14,6 +14,10 @@ public class SearchClassParam {
     @Size(max = 20, message = "搜索内容长度不超过20个字符！")
     private String search;
     private Integer grade;
+    /**
+     * 教师id
+     */
+    private Long teacherId;
 
     public String getSort() {
         return sort;
@@ -61,5 +65,13 @@ public class SearchClassParam {
 
     public void setGrade(Integer grade) {
         this.grade = grade;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
     }
 }

@@ -14,20 +14,18 @@ import java.util.List;
 @Repository
 public interface ClassInfoDaoCustom {
     /**
-     * 管理员
      * 分页查询
      * @param classParam
      * @return
      */
-    List<ClassDto> adminGetListByPage(SearchClassParam classParam);
+    List<ClassDto> getListByPage(SearchClassParam classParam);
 
     /**
-     * 管理员
      * 分页查询
      * @param classParam
      * @return
      */
-    Integer adminGetCountByPage(SearchClassParam classParam);
+    Integer getCountByPage(SearchClassParam classParam);
 
     /**
      * 模糊查询班级

@@ -125,8 +125,8 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     @Transactional(readOnly = true)
     public MessageVo adminGetListByPage(SearchClassParam classParam) {
         if (classParam != null) {
-            List<ClassDto> classDtoList = classInfoDao.adminGetListByPage(classParam);
-            Integer count = classInfoDao.adminGetCountByPage(classParam);
+            List<ClassDto> classDtoList = classInfoDao.getListByPage(classParam);
+            Integer count = classInfoDao.getCountByPage(classParam);
             Map<String, Object> map = Maps.newHashMap();
             map.put("list", classDtoList);
             map.put("total", count);
@@ -235,5 +235,71 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     public MessageVo getListClassIdName() {
         List<ValueLabelDto> dtos = classInfoDao.getListClassIdName();
         return MessageVo.success(dtos);
+    }
+
+    /**
+     * 教师
+     * 分页查询
+     * @param classParam
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, SearchClassParam classParam) {
+        if (classParam != null && sharedUser != null) {
+            List<TeacherInfo> teacherInfos = teacherInfoDao.getByUserId(sharedUser.getUserId());
+            if (CollectionUtils.isEmpty(teacherInfos)) {
+                return MessageVo.fail("班级数据获取失败，未查询到当前用户的教师信息！");
+            } else {
+                TeacherInfo teacherInfo = teacherInfos.get(0);
+                if (teacherInfo == null) {
+                    return MessageVo.fail("班级数据获取失败，未查询到当前用户的教师信息！");
+                } else {
+                    classParam.setTeacherId(teacherInfo.getTeacherId());
+                }
+            }
+            List<ClassDto> classDtoList = classInfoDao.getListByPage(classParam);
+            Integer count = classInfoDao.getCountByPage(classParam);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", classDtoList);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 教师
+     * 添加班级
+     * @param classForm
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo addByTeacher(SharedUser sharedUser, AddClassForm classForm) {
+        if (classForm != null && sharedUser != null) {
+            ClassInfo classInfo = new ClassInfo();
+            Date curDate = new Date();
+            BeanUtils.copyProperties(classForm, classInfo);
+            classInfo.setClassId(IdGeneratorUtils.getNewId());
+            classInfo.setCreateUserId(sharedUser.getUserId());
+            classInfo.setCreateTime(curDate);
+            classInfo.setUpdateTime(curDate);
+            List<TeacherInfo> teacherInfos = teacherInfoDao.getByUserId(sharedUser.getUserId());
+            if (CollectionUtils.isEmpty(teacherInfos)) {
+                return MessageVo.fail("添加班级失败，未查询到当前用户的教师信息！");
+            } else {
+                TeacherInfo teacherInfo = teacherInfos.get(0);
+                if (teacherInfo == null) {
+                    return MessageVo.fail("添加班级失败，未查询到当前用户的教师信息！");
+                } else {
+                    classInfo.setTeacherId(teacherInfo.getTeacherId());
+                }
+            }
+            classInfoDao.save(classInfo);
+            return MessageVo.success();
+        }
+        return MessageVo.fail("添加班级失败！");
     }
 }

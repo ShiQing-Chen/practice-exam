@@ -32,6 +32,7 @@ public class ClassInfoController {
 
 
     /**
+     * 管理员
      * 添加班级
      * @param sharedUser
      * @param classForm
@@ -182,5 +183,40 @@ public class ClassInfoController {
     @ResponseBody
     public MessageVo getListClassIdName() {
         return classInfoService.getListClassIdName();
+    }
+
+    /**
+     * 管理员
+     * 分页查询
+     * @param classParam
+     * @return
+     */
+    @RequestMapping(value = "/teacher/class/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchClassParam classParam, BindingResult bindingResult) {
+        if (classParam == null) {
+            return MessageVo.fail("获取班级数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return classInfoService.teacherGetListByPage(sharedUser, classParam);
+    }
+
+    /**
+     * 教师
+     * 添加班级
+     * @param sharedUser
+     * @param classForm
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/class/addByTeacher", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo addByTeacher(SharedUser sharedUser, @RequestBody @Valid AddClassForm classForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return classInfoService.addByTeacher(sharedUser, classForm);
     }
 }
