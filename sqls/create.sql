@@ -248,3 +248,17 @@ CREATE TABLE `paper_class` (
     PRIMARY KEY (`id`),
   UNIQUE KEY `uk_paper_class` (`paper_id`,`class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试卷班级关系表';
+
+DROP TABLE IF EXISTS `paper_generate`;
+CREATE TABLE `paper_generate` (
+  `generate_id` bigint(20) NOT NULL COMMENT '组卷关系ID',
+  `paper_id` bigint(20) NOT NULL COMMENT '试卷ID',
+  `question_id` bigint(20) NOT NULL COMMENT '试题ID',
+  `question_score` decimal(4,2) DEFAULT 0 COMMENT '试题分数',
+  `order_number` int DEFAULT NULL COMMENT '试题序号',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`generate_id`),
+    key `idx_paper_id` (`paper_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '组卷信息表';
