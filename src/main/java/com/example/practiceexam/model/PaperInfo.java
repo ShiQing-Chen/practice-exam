@@ -26,6 +26,10 @@ public class PaperInfo {
     @Id
     private Long paperId;
     /**
+     * 课程ID
+     */
+    private Long courseId;
+    /**
      * 试卷名称
      */
     private String paperName;
@@ -68,6 +72,14 @@ public class PaperInfo {
 
     public void setPaperId(Long paperId) {
         this.paperId = paperId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public String getPaperName() {

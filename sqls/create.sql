@@ -224,6 +224,7 @@ DROP TABLE IF EXISTS `paper_info`;
 
 CREATE TABLE `paper_info` (
   `paper_id` bigint(20) NOT NULL COMMENT '试卷ID',
+  `course_id` bigint(20) NOT NULL COMMENT '课程ID',
   `paper_name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '试卷名称',
   `do_time` int DEFAULT NULL COMMENT '检测时长 (分钟)',
   `paper_type` smallint(6) DEFAULT NULL COMMENT '试卷类型 1考试 2测试 3练习',
@@ -234,6 +235,7 @@ CREATE TABLE `paper_info` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`paper_id`),
+    key `idx_course_id` (`course_id`),
     key `idx_paper_type` (`paper_type`),
     key `idx_paper_status` (`paper_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '试卷信息表';

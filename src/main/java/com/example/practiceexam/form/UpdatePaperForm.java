@@ -10,6 +10,11 @@ import java.util.List;
  **/
 public class UpdatePaperForm {
     /**
+     * 课程ID
+     */
+    @NotNull(message = "课程ID不能为空！")
+    private Long courseId;
+    /**
      * 试卷ID
      */
     @NotNull(message = "试卷ID不能为空！")
@@ -38,6 +43,14 @@ public class UpdatePaperForm {
      * 班级列表
      */
     private List<Long> classList;
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
 
     public Long getPaperId() {
         return paperId;

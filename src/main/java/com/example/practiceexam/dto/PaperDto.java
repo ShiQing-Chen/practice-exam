@@ -12,6 +12,14 @@ public class PaperDto {
      */
     private Long paperId;
     /**
+     * 课程ID
+     */
+    private Long courseId;
+    /**
+     * 课程名称
+     */
+    private String courseName;
+    /**
      * 试卷名称
      */
     private String paperName;
@@ -59,6 +67,22 @@ public class PaperDto {
 
     public void setPaperId(Long paperId) {
         this.paperId = paperId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public String getPaperName() {

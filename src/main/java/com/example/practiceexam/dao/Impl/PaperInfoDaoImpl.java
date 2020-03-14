@@ -40,10 +40,12 @@ public class PaperInfoDaoImpl implements PaperInfoDaoCustom {
             return Lists.newArrayList();
         }
         StringBuilder sqlSb = new StringBuilder();
-        sqlSb.append(" select p.paper_id paperId, p.paper_name paperName, p.do_time doTime, p.paper_type paperType, paper_status paperStatus, ");
+        sqlSb.append(" select p.paper_id paperId, p.paper_name paperName, p.do_time doTime, p.paper_type paperType, ");
+        sqlSb.append(" paper_status paperStatus, p.course_id courseId, ci.course_name courseName,  ");
         sqlSb.append(" p.create_user_id createUserId, cu.nick_name createUserName, p.create_time createTime, ");
         sqlSb.append(" p.publish_user_id publishUserId, pu.nick_name publishUserName, p.publish_time publishTime ");
         sqlSb.append(" from paper_info p ");
+        sqlSb.append(" left join course_info ci on p.course_id = ci.course_id ");
         sqlSb.append(" left join user_info cu on p.create_user_id = cu.user_id ");
         sqlSb.append(" left join user_info pu on p.publish_user_id = pu.user_id WHERE 1=1 ");
 
@@ -51,6 +53,10 @@ public class PaperInfoDaoImpl implements PaperInfoDaoCustom {
         if (StringUtils.isNotEmpty(param.getSearch())) {
             sqlSb.append(" AND p.paper_name LIKE :search ");
             paramMap.put("search", "%" + param.getSearch() + "%");
+        }
+        if (param.getCourseId() != null) {
+            sqlSb.append(" AND p.course_id = :courseId ");
+            paramMap.put("courseId", param.getCourseId());
         }
         if (param.getPaperType() != null) {
             sqlSb.append(" AND p.paper_type = :paperType ");
@@ -68,6 +74,8 @@ public class PaperInfoDaoImpl implements PaperInfoDaoCustom {
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());
         query.addScalar("paperId", StandardBasicTypes.LONG)
+                .addScalar("courseId", StandardBasicTypes.LONG)
+                .addScalar("courseName", StandardBasicTypes.STRING)
                 .addScalar("paperName", StandardBasicTypes.STRING)
                 .addScalar("doTime", StandardBasicTypes.INTEGER)
                 .addScalar("paperType", StandardBasicTypes.INTEGER)
