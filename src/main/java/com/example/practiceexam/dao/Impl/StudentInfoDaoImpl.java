@@ -28,7 +28,7 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
     private EntityManager entityManager;
 
 
-    @SuppressWarnings({"unchecked", "Duplicates" })
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
     public List<StudentDto> getListByPage(SearchStudentParam param) {
         if (param == null) {
@@ -46,6 +46,10 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         if (param.getClassId() != null) {
             sqlSb.append(" AND s.class_id = :classId ");
             paramMap.put("classId", param.getClassId());
+        }
+        if (!CollectionUtils.isEmpty(param.getClassIdList())) {
+            sqlSb.append(" AND s.class_id in (:classIdList) ");
+            paramMap.put("classIdList", param.getClassIdList());
         }
         if (StringUtils.isNotEmpty(param.getSearch())) {
             sqlSb.append(" AND (s.student_number LIKE :search or s.student_name LIKE :search or u.mobile LIKE :search) ");
@@ -94,7 +98,7 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         return query.list();
     }
 
-    @SuppressWarnings({"unchecked", "Duplicates" })
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @Override
     public Integer getCountByPage(SearchStudentParam param) {
         if (param == null) {
@@ -110,6 +114,10 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         if (param.getClassId() != null) {
             sqlSb.append(" AND s.class_id = :classId ");
             paramMap.put("classId", param.getClassId());
+        }
+        if (!CollectionUtils.isEmpty(param.getClassIdList())) {
+            sqlSb.append(" AND s.class_id in (:classIdList) ");
+            paramMap.put("classIdList", param.getClassIdList());
         }
         if (StringUtils.isNotEmpty(param.getSearch())) {
             sqlSb.append(" AND (s.student_number LIKE :search or s.student_name LIKE :search or u.mobile LIKE :search) ");

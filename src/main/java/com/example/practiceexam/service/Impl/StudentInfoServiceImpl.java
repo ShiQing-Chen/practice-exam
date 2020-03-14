@@ -3,6 +3,7 @@ package com.example.practiceexam.service.Impl;
 import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
+import com.example.practiceexam.dao.ClassInfoDao;
 import com.example.practiceexam.dao.StudentInfoDao;
 import com.example.practiceexam.dao.UserInfoDao;
 import com.example.practiceexam.dto.StudentDto;
@@ -10,6 +11,7 @@ import com.example.practiceexam.dto.StudentInfoDto;
 import com.example.practiceexam.form.AddStudentForm;
 import com.example.practiceexam.form.UpdateStudentForm;
 import com.example.practiceexam.model.StudentInfo;
+import com.example.practiceexam.model.TeacherInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.example.practiceexam.service.StudentInfoService;
@@ -38,6 +40,9 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Autowired
     private StudentInfoDao studentInfoDao;
+
+    @Autowired
+    private ClassInfoDao classInfoDao;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -299,5 +304,34 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             return MessageVo.success(errList);
         }
         return MessageVo.fail("导入失败！");
+    }
+
+    /**
+     * 教师查询
+     * 分页查询
+     * @param studentParam
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, SearchStudentParam studentParam) {
+        if (studentParam != null) {
+            if (sharedUser.getTeacherId() == null) {
+                return MessageVo.fail("班级数据获取失败，未查询到当前用户的教师信息！");
+            }
+            List<Long> classIdList = classInfoDao.getClassIdByTeacherId(sharedUser.getTeacherId());
+            if (CollectionUtils.isEmpty(classIdList)) {
+                return MessageVo.fail("当前教师未带任何班级！");
+            }
+            studentParam.setClassIdList(classIdList);
+            List<StudentDto> userInfoList = studentInfoDao.getListByPage(studentParam);
+            Integer count = studentInfoDao.getCountByPage(studentParam);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", userInfoList);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
     }
 }

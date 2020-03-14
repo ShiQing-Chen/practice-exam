@@ -187,7 +187,7 @@ public class StudentInfoController extends BaseExcelController {
      * @param uploadFile
      * @return
      */
-    @RequestMapping(value = "//student/importSomeUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/student/importSomeUser", method = RequestMethod.POST)
     @ResponseBody
     public MessageVo importExcelSomeUser(@RequestParam("upfile") MultipartFile uploadFile, @RequestParam("classId") Long classId, SharedUser sharedUser) throws Exception {
         if (sharedUser == null) {
@@ -286,6 +286,25 @@ public class StudentInfoController extends BaseExcelController {
             return MessageVo.fail("导入用户数据失败!");
         }
         return MessageVo.fail("导入用户数据失败!");
+    }
+
+
+    /**
+     * 教师查询
+     * 分页查询
+     * @param studentParam
+     * @return
+     */
+    @RequestMapping(value = "/student/teacher/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchStudentParam studentParam, BindingResult bindingResult) {
+        if (studentParam == null) {
+            return MessageVo.fail("获取学生数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return studentInfoService.teacherGetListByPage(sharedUser, studentParam);
     }
 
 }

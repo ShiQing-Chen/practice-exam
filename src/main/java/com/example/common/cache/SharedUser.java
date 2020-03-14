@@ -13,6 +13,8 @@ public class SharedUser {
     private String nickName;
     private Integer userType;
     private Long courseId;
+    private Long teacherId;
+    private Long studentId;
     private Set<String> roleCodes = Sets.newHashSet();
 
     public Long getUserId() {
@@ -45,6 +47,22 @@ public class SharedUser {
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 
     public Set<String> getRoleCodes() {

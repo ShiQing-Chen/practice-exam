@@ -247,17 +247,10 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     @Transactional(readOnly = true)
     public MessageVo teacherGetListByPage(SharedUser sharedUser, SearchClassParam classParam) {
         if (classParam != null && sharedUser != null) {
-            List<TeacherInfo> teacherInfos = teacherInfoDao.getByUserId(sharedUser.getUserId());
-            if (CollectionUtils.isEmpty(teacherInfos)) {
+            if (sharedUser.getTeacherId() == null) {
                 return MessageVo.fail("班级数据获取失败，未查询到当前用户的教师信息！");
-            } else {
-                TeacherInfo teacherInfo = teacherInfos.get(0);
-                if (teacherInfo == null) {
-                    return MessageVo.fail("班级数据获取失败，未查询到当前用户的教师信息！");
-                } else {
-                    classParam.setTeacherId(teacherInfo.getTeacherId());
-                }
             }
+            classParam.setTeacherId(sharedUser.getTeacherId());
             List<ClassDto> classDtoList = classInfoDao.getListByPage(classParam);
             Integer count = classInfoDao.getCountByPage(classParam);
             Map<String, Object> map = Maps.newHashMap();
@@ -286,17 +279,10 @@ public class ClassInfoServiceImpl implements ClassInfoService {
             classInfo.setCreateUserId(sharedUser.getUserId());
             classInfo.setCreateTime(curDate);
             classInfo.setUpdateTime(curDate);
-            List<TeacherInfo> teacherInfos = teacherInfoDao.getByUserId(sharedUser.getUserId());
-            if (CollectionUtils.isEmpty(teacherInfos)) {
-                return MessageVo.fail("添加班级失败，未查询到当前用户的教师信息！");
-            } else {
-                TeacherInfo teacherInfo = teacherInfos.get(0);
-                if (teacherInfo == null) {
-                    return MessageVo.fail("添加班级失败，未查询到当前用户的教师信息！");
-                } else {
-                    classInfo.setTeacherId(teacherInfo.getTeacherId());
-                }
+            if (sharedUser.getTeacherId() == null) {
+                return MessageVo.fail("班级数据获取失败，未查询到当前用户的教师信息！");
             }
+            classInfo.setTeacherId(sharedUser.getTeacherId());
             classInfoDao.save(classInfo);
             return MessageVo.success();
         }

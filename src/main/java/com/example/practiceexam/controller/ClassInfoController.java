@@ -191,7 +191,7 @@ public class ClassInfoController {
      * @param classParam
      * @return
      */
-    @RequestMapping(value = "/teacher/class/getListByPage", method = RequestMethod.POST)
+    @RequestMapping(value = "/class/teacher/getListByPage", method = RequestMethod.POST)
     @ResponseBody
     public MessageVo teacherGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchClassParam classParam, BindingResult bindingResult) {
         if (classParam == null) {

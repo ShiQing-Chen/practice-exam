@@ -71,4 +71,12 @@ public interface StudentInfoService {
      * @return
      */
     MessageVo addSome(SharedUser sharedUser, List<AddStudentVo> studentVoList);
+
+    /**
+     * 教师查询
+     * 分页查询
+     * @param studentParam
+     * @return
+     */
+    MessageVo teacherGetListByPage(SharedUser sharedUser, SearchStudentParam studentParam);
 }

@@ -6,7 +6,10 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.config.OnlineUserManager;
 import com.example.practiceexam.config.RoleManager;
 import com.example.practiceexam.dao.MessageInfoDao;
+import com.example.practiceexam.dao.StudentInfoDao;
+import com.example.practiceexam.dao.TeacherInfoDao;
 import com.example.practiceexam.dao.UserInfoDao;
+import com.example.practiceexam.model.TeacherInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.service.ApiLoginService;
 import com.example.practiceexam.vo.ApiLoginVo;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -43,6 +47,10 @@ public class ApiLoginServiceImpl implements ApiLoginService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private MessageInfoDao messageInfoDao;
+    @Autowired
+    private TeacherInfoDao teacherInfoDao;
+    @Autowired
+    private StudentInfoDao studentInfoDao;
 
     @Value("${jwt.secretKey}")
     private String jwtSecretKey;
@@ -197,6 +205,21 @@ public class ApiLoginServiceImpl implements ApiLoginService {
         //补充角色code
         Set<String> roles = RoleManager.getRoleByType(user.getUserType());
         sharedUser.setRoleCodes(roles);
+        if (sharedUser.getUserType() != null) {
+            if (sharedUser.getUserType().equals(UserInfo.TYPE_TEACHER)) {
+                // 补充教师信息
+                Long teacherId = teacherInfoDao.getTeacherIdByUserId(sharedUser.getUserId());
+                if (teacherId != null) {
+                    sharedUser.setTeacherId(teacherId);
+                }
+            } else if (sharedUser.getUserType().equals(UserInfo.TYPE_STUDENT)) {
+                // 补充学生信息
+                Long studentId = studentInfoDao.getStudentIdByUserId(sharedUser.getUserId());
+                if (studentId != null) {
+                    sharedUser.setStudentId(studentId);
+                }
+            }
+        }
         OnlineUserManager.addUserClient(sharedUser.getUserId(), sharedUser);
     }
 }

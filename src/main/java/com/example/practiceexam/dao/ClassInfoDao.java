@@ -51,4 +51,12 @@ public interface ClassInfoDao extends JpaRepository<ClassInfo, Long>, ClassInfoD
      */
     @Query(value = "select distinct c.major_name from class_info c ", nativeQuery = true)
     List<String> getListMajorName();
+
+    /**
+     * 根据教师id获取班级id列表
+     * @param teacherId 教师ID
+     * @return
+     */
+    @Query(value = "select c.class_id from class_info c where c.teacher_id = ?1 ", nativeQuery = true)
+    List<Long> getClassIdByTeacherId(Long teacherId);
 }

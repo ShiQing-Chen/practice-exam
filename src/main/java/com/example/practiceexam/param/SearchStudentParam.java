@@ -1,6 +1,7 @@
 package com.example.practiceexam.param;
 
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * @author ShiQing_Chen
@@ -17,6 +18,8 @@ public class SearchStudentParam {
     private String majorName;
     private String className;
     private Long classId;
+    private List<Long> classIdList;
+
 
     public String getSort() {
         return sort;
@@ -88,5 +91,13 @@ public class SearchStudentParam {
 
     public void setClassId(Long classId) {
         this.classId = classId;
+    }
+
+    public List<Long> getClassIdList() {
+        return classIdList;
+    }
+
+    public void setClassIdList(List<Long> classIdList) {
+        this.classIdList = classIdList;
     }
 }

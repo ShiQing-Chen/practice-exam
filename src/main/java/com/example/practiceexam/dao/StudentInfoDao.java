@@ -54,4 +54,12 @@ public interface StudentInfoDao extends JpaRepository<StudentInfo, Long>, Studen
      * @return
      */
     List<StudentInfo> getByUserId(Long userId);
+
+    /**
+     * 根据用户id获取学生ID
+     * @param userId 用户ID
+     * @return
+     */
+    @Query(value = "select s.student_id from student_info s where s.user_id = ?1 ", nativeQuery = true)
+    Long getStudentIdByUserId(Long userId);
 }
