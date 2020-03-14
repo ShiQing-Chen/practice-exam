@@ -146,4 +146,22 @@ public class MaterialInfoController {
     public MessageVo indexGetList() {
         return materialInfoService.indexGetList();
     }
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/material/teacher/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchMaterialParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取资料数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return materialInfoService.teacherGetListByPage(sharedUser, param);
+    }
 }

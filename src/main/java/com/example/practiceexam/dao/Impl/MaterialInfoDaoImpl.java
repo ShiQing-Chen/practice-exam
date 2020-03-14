@@ -57,6 +57,10 @@ public class MaterialInfoDaoImpl implements MaterialInfoDaoCustom {
             sqlSb.append(" AND n.material_status = :materialStatus ");
             paramMap.put("materialStatus", param.getMaterialStatus());
         }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND n.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
+        }
         if ("desc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
             sqlSb.append(" order by ").append(param.getSort()).append(" desc");
         } else if ("asc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
@@ -110,6 +114,10 @@ public class MaterialInfoDaoImpl implements MaterialInfoDaoCustom {
         if (param.getMaterialStatus() != null) {
             sqlSb.append(" AND n.material_status = :materialStatus ");
             paramMap.put("materialStatus", param.getMaterialStatus());
+        }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND n.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());

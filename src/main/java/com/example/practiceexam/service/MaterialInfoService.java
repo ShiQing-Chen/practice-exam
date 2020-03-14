@@ -65,4 +65,12 @@ public interface MaterialInfoService {
      * @return
      */
     MessageVo indexGetList();
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo teacherGetListByPage(SharedUser sharedUser, SearchMaterialParam param);
 }

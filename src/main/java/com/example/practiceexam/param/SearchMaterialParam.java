@@ -14,6 +14,10 @@ public class SearchMaterialParam {
     @Size(max = 20, message = "搜索内容长度不超过20个字符！")
     private String search;
     private Integer materialStatus;
+    /**
+     * 创建用户id
+     */
+    private Long createUserId;
 
     public String getSort() {
         return sort;
@@ -61,5 +65,13 @@ public class SearchMaterialParam {
 
     public void setMaterialStatus(Integer materialStatus) {
         this.materialStatus = materialStatus;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 }

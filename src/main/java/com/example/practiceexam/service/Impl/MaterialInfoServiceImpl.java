@@ -49,6 +49,10 @@ public class MaterialInfoServiceImpl implements MaterialInfoService {
             materialInfo.setCreateUserId(sharedUser.getUserId());
             materialInfo.setCreateTime(curDate);
             materialInfo.setUpdateTime(curDate);
+            if (form.getMaterialStatus().equals(MaterialInfo.STATUS_PUBLIC)) {
+                materialInfo.setPublishTime(curDate);
+                materialInfo.setPublishUserId(sharedUser.getUserId());
+            }
             materialInfoDao.save(materialInfo);
             return MessageVo.success();
         }
@@ -184,5 +188,27 @@ public class MaterialInfoServiceImpl implements MaterialInfoService {
             return MessageVo.success(Lists.newArrayList());
         }
         return MessageVo.success(list);
+    }
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, SearchMaterialParam param) {
+        if (param != null && sharedUser != null) {
+            param.setCreateUserId(sharedUser.getUserId());
+            List<MaterialDto> list = materialInfoDao.getListByPage(param);
+            Integer count = materialInfoDao.getCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
     }
 }
