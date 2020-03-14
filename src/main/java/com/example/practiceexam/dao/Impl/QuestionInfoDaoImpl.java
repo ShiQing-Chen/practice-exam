@@ -74,6 +74,10 @@ public class QuestionInfoDaoImpl implements QuestionInfoDaoCustom {
             sqlSb.append(" AND q.question_difficulty = :questionDifficulty ");
             paramMap.put("questionDifficulty", param.getQuestionDifficulty());
         }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND q.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
+        }
         if ("desc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
             sqlSb.append(" order by ").append(param.getSort()).append(" desc");
         } else if ("asc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
@@ -150,6 +154,10 @@ public class QuestionInfoDaoImpl implements QuestionInfoDaoCustom {
         if (param.getQuestionDifficulty() != null) {
             sqlSb.append(" AND q.question_difficulty = :questionDifficulty ");
             paramMap.put("questionDifficulty", param.getQuestionDifficulty());
+        }
+        if (param.getCreateUserId() != null) {
+            sqlSb.append(" AND q.create_user_id = :createUserId ");
+            paramMap.put("createUserId", param.getCreateUserId());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());

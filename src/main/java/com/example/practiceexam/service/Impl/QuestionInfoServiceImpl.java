@@ -297,4 +297,50 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
         }
         return MessageVo.fail("自动组卷错误！为获取试卷ID！");
     }
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, SearchQuesParam param) {
+        if (param != null && sharedUser != null) {
+            param.setCreateUserId(sharedUser.getUserId());
+            List<QuesDto> list = questionInfoDao.getListByPage(param);
+            Integer count = questionInfoDao.getCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 教师 不能获取自身待审核的试题
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getReadyReviewByTeacher(SharedUser sharedUser) {
+        if (sharedUser != null) {
+            Long courseId = sharedUser.getCourseId();
+            if (courseId == null) {
+                return MessageVo.fail("当前教师未绑定课程！");
+            }
+            QuestionInfo questionInfo = questionInfoDao.teacherGetReadyReviewByCourseId(courseId, sharedUser.getUserId());
+            if (questionInfo != null) {
+                return MessageVo.success(questionInfo);
+            } else {
+                return MessageVo.fail("题库的试题已经审核完，暂无待审试题！");
+            }
+        }
+        return MessageVo.fail("获取试题失败！");
+    }
 }

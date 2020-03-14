@@ -29,6 +29,10 @@ public class SearchQuesParam {
      * 试题难易程度 1简单 2中等 3困难
      */
     private Integer questionDifficulty;
+    /**
+     * 创建用户id
+     */
+    private Long createUserId;
 
     public String getSort() {
         return sort;
@@ -100,5 +104,13 @@ public class SearchQuesParam {
 
     public void setQuestionDifficulty(Integer questionDifficulty) {
         this.questionDifficulty = questionDifficulty;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 }

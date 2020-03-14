@@ -183,4 +183,37 @@ public class QuestionInfoController {
         return questionInfoService.autoGetQuesList(paperId);
     }
 
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/question/teacher/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo teacherGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchQuesParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取试题数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return questionInfoService.teacherGetListByPage(sharedUser, param);
+    }
+
+    /**
+     * 教师
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @return
+     */
+    @RequestMapping(value = "/question/getReadyReviewByTeacher", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getReadyReviewByTeacher(SharedUser sharedUser) {
+        if (sharedUser == null) {
+            return MessageVo.fail("请登录后重试！");
+        }
+        return questionInfoService.getReadyReviewByTeacher(sharedUser);
+    }
+
 }

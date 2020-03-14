@@ -11,7 +11,6 @@ public class AddQuesForm {
     /**
      * 课程ID
      */
-    @NotNull(message = "课程ID不能为空！")
     private Long courseId;
     /**
      * 试题类型 1选择题 2操作题

@@ -39,6 +39,16 @@ public interface QuestionInfoDao extends JpaRepository<QuestionInfo, Long>, Ques
     QuestionInfo getReadyReviewByCourseId(Long courseId);
 
     /**
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @param courseId 课程ID
+     * @param userId 创建用户
+     * @return
+     */
+    @Query(value = "select * from question_info where course_id = ?1 and question_status =2 and create_user_id <> ?2 order by rand() limit 1", nativeQuery = true)
+    QuestionInfo teacherGetReadyReviewByCourseId(Long courseId, Long userId);
+
+    /**
      * 根据试卷ID获取试题
      * @param paperId
      * @return

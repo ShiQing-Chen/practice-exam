@@ -84,4 +84,20 @@ public interface QuestionInfoService {
      * @return
      */
     MessageVo autoGetQuesList(Long paperId);
+
+    /**
+     * 教师
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo teacherGetListByPage(SharedUser sharedUser, SearchQuesParam param);
+
+    /**
+     * 教师
+     * 随机获取到某课程下
+     * 待审核的试题
+     * @return
+     */
+    MessageVo getReadyReviewByTeacher(SharedUser sharedUser);
 }
