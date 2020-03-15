@@ -6,16 +6,17 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.PaperClassDao;
 import com.example.practiceexam.dao.PaperGenerateDao;
 import com.example.practiceexam.dao.PaperInfoDao;
+import com.example.practiceexam.dao.QuestionInfoDao;
 import com.example.practiceexam.dto.PaperDto;
 import com.example.practiceexam.dto.PaperInfoDto;
 import com.example.practiceexam.form.AddPaperForm;
 import com.example.practiceexam.form.UpdatePaperForm;
-import com.example.practiceexam.model.PaperClass;
-import com.example.practiceexam.model.PaperInfo;
-import com.example.practiceexam.model.UserInfo;
+import com.example.practiceexam.model.*;
+import com.example.practiceexam.param.PracticeSearchPaperParam;
 import com.example.practiceexam.param.SearchPaperParam;
 import com.example.practiceexam.param.StudentSearchPaperParam;
 import com.example.practiceexam.service.PaperInfoService;
+import com.example.practiceexam.utils.DateCodeUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,8 @@ public class PaperInfoServiceImpl implements PaperInfoService {
     private PaperInfoDao paperInfoDao;
     @Autowired
     private PaperGenerateDao paperGenerateDao;
+    @Autowired
+    private QuestionInfoDao questionInfoDao;
 
     /**
      * 添加
@@ -248,6 +252,81 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             param.setPaperStatus(PaperInfo.STATUS_PUBLIC);
             List<PaperInfoDto> list = paperInfoDao.studentGetListByPage(param);
             Integer count = paperInfoDao.studentGetCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 学生自由练习
+     * 自动创建试卷
+     * @param sharedUser
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo studentAdd(SharedUser sharedUser) {
+        if (sharedUser != null) {
+            PaperInfo paperInfo = new PaperInfo();
+            Date curDate = new Date();
+            paperInfo.setPaperId(IdGeneratorUtils.getNewId());
+            if (sharedUser.getCourseId() == null) {
+                return MessageVo.fail("自由练习生成失败，当前学生未绑定任何课程！");
+            }
+            paperInfo.setPaperName(DateCodeUtil.getDateString(curDate) + "-练习");
+            paperInfo.setPaperStatus(1);
+            paperInfo.setPaperType(4);
+            paperInfo.setCourseId(sharedUser.getCourseId());
+            paperInfo.setCreateUserId(sharedUser.getUserId());
+            paperInfo.setCreateTime(curDate);
+            paperInfo.setUpdateTime(curDate);
+            // 自动组卷并保存
+            List<QuestionInfo> choiceQues = questionInfoDao.getRandByCourseId(paperInfo.getCourseId(), 1, 25);
+            paperGenerateDao.delByPaperId(paperInfo.getPaperId());
+            List<PaperGenerate> generateList = Lists.newArrayList();
+            if (!CollectionUtils.isEmpty(choiceQues)) {
+                paperInfoDao.save(paperInfo);
+                int i = 1;
+                for (QuestionInfo quesDto : choiceQues) {
+                    PaperGenerate generate = new PaperGenerate();
+                    generate.setGenerateId(IdGeneratorUtils.getNewId());
+                    generate.setPaperId(paperInfo.getPaperId());
+                    generate.setQuestionId(quesDto.getQuestionId());
+                    generate.setOrderNumber(i);
+                    generate.setCreateTime(curDate);
+                    generate.setCreateUserId(sharedUser.getUserId());
+                    generate.setQuestionScore(BigDecimal.valueOf(4L));
+                    generateList.add(generate);
+                    i++;
+                }
+                if (!CollectionUtils.isEmpty(generateList)) {
+                    paperGenerateDao.saveAll(generateList);
+                }
+            }else {
+                return MessageVo.fail("自由练习生成失败，未查询到题库的试题！");
+            }
+            return MessageVo.success(paperInfo);
+        }
+        return MessageVo.fail("自由练习生成失败！");
+    }
+
+    /**
+     * 学生 自由练习
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo studentPracticeGetListByPage(SharedUser sharedUser, PracticeSearchPaperParam param) {
+        if (param != null && sharedUser != null) {
+            param.setCreateUserId(sharedUser.getUserId());
+            List<PaperInfoDto> list = paperInfoDao.studentPracticeGetListByPage(param);
+            Integer count = paperInfoDao.studentPracticeGetCountByPage(param);
             Map<String, Object> map = Maps.newHashMap();
             map.put("list", list);
             map.put("total", count);

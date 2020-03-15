@@ -4,6 +4,7 @@ import com.example.common.cache.SharedUser;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddPaperForm;
 import com.example.practiceexam.form.UpdatePaperForm;
+import com.example.practiceexam.param.PracticeSearchPaperParam;
 import com.example.practiceexam.param.SearchPaperParam;
 import com.example.practiceexam.param.StudentSearchPaperParam;
 
@@ -70,4 +71,20 @@ public interface PaperInfoService {
      * @return
      */
     MessageVo studentGetListByPage(SharedUser sharedUser, StudentSearchPaperParam param);
+
+    /**
+     * 学生自由练习
+     * 自动创建试卷
+     * @param sharedUser
+     * @return
+     */
+    MessageVo studentAdd(SharedUser sharedUser);
+
+    /**
+     * 学生 自由练习
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo studentPracticeGetListByPage(SharedUser sharedUser, PracticeSearchPaperParam param);
 }

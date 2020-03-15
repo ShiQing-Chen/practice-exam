@@ -53,7 +53,7 @@ public class QuesInfoDto {
     /**
      * 试题分数
      */
-    private BigDecimal questionScore;
+    private BigDecimal questionScore = BigDecimal.ZERO;
 
     public Long getQuestionId() {
         return questionId;

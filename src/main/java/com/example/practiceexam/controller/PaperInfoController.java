@@ -5,6 +5,7 @@ import com.example.common.util.BindingResultUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddPaperForm;
 import com.example.practiceexam.form.UpdatePaperForm;
+import com.example.practiceexam.param.PracticeSearchPaperParam;
 import com.example.practiceexam.param.SearchPaperParam;
 import com.example.practiceexam.param.StudentSearchPaperParam;
 import com.example.practiceexam.service.PaperInfoService;
@@ -158,5 +159,38 @@ public class PaperInfoController {
             return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return paperInfoService.studentGetListByPage(sharedUser, param);
+    }
+
+    /**
+     * 学生自由练习
+     * 自动创建试卷
+     * @param sharedUser
+     * @return
+     */
+    @RequestMapping(value = "/paper/student/add", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo studentAdd(SharedUser sharedUser) {
+        if (sharedUser == null) {
+            return MessageVo.fail("请登录后重试！");
+        }
+        return paperInfoService.studentAdd(sharedUser);
+    }
+
+    /**
+     * 学生 自由练习
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/paper/student/practiceGetListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo studentPracticeGetListByPage(SharedUser sharedUser, @RequestBody @Valid PracticeSearchPaperParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取试卷数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return paperInfoService.studentPracticeGetListByPage(sharedUser, param);
     }
 }

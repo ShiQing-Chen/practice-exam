@@ -1,5 +1,6 @@
 package com.example.practiceexam.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -74,6 +75,10 @@ public class PaperInfoDto {
      * 答题结果数量
      */
     private Integer resultNumber;
+    /**
+     * 答题结果得分
+     */
+    private BigDecimal totalScore;
 
     public Long getPaperId() {
         return paperId;
@@ -209,5 +214,13 @@ public class PaperInfoDto {
 
     public void setResultNumber(Integer resultNumber) {
         this.resultNumber = resultNumber;
+    }
+
+    public BigDecimal getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(BigDecimal totalScore) {
+        this.totalScore = totalScore;
     }
 }

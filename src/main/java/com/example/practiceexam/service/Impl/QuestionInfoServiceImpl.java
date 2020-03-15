@@ -367,7 +367,7 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
      * @return
      */
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = RuntimeException.class)
     public MessageVo studentGetQuesListByPaperId(Long paperId) {
         if (paperId != null) {
             Map<String, Object> map = Maps.newHashMap();
@@ -397,6 +397,12 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
                     return dto;
                 }).collect(Collectors.toList());
                 map.put("list", quesInfoDtoList);
+            }
+            // 更新试卷开始
+            PaperInfo paperInfo = paperInfoDao.getById(paperId);
+            if (paperInfo != null && paperInfo.getPaperType() != null && paperInfo.getPaperType().equals(4)) {
+                paperInfo.setStartTime(new Date());
+                paperInfoDao.save(paperInfo);
             }
             return MessageVo.success(map);
         }

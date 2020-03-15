@@ -38,7 +38,7 @@ public class PaperInfo {
      */
     private Integer doTime;
     /**
-     * 试卷类型 1考试 2测试 3练习
+     * 试卷类型 1考试 2测试 3练习 4自由练习
      */
     private Integer paperType;
     /**

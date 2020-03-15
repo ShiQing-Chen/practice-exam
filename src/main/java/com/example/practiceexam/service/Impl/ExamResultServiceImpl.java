@@ -5,10 +5,12 @@ import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.ExamResultDao;
 import com.example.practiceexam.dao.PaperGenerateDao;
+import com.example.practiceexam.dao.PaperInfoDao;
 import com.example.practiceexam.dao.QuestionInfoDao;
 import com.example.practiceexam.dto.ExamResultDto;
 import com.example.practiceexam.form.AddExamResultForm;
 import com.example.practiceexam.model.ExamResult;
+import com.example.practiceexam.model.PaperInfo;
 import com.example.practiceexam.model.QuestionInfo;
 import com.example.practiceexam.service.ExamResultService;
 import com.example.practiceexam.vo.StudentSubmitExamResultVo;
@@ -38,6 +40,8 @@ public class ExamResultServiceImpl implements ExamResultService {
     private PaperGenerateDao paperGenerateDao;
     @Autowired
     private QuestionInfoDao questionInfoDao;
+    @Autowired
+    private PaperInfoDao paperInfoDao;
 
     /**
      * 添加
@@ -89,6 +93,11 @@ public class ExamResultServiceImpl implements ExamResultService {
                 examResultList.add(examResult);
             }
             if (!CollectionUtils.isEmpty(examResultList)) {
+                PaperInfo paperInfo = paperInfoDao.getById(form.getPaperId());
+                if (paperInfo != null && paperInfo.getPaperType() != null && paperInfo.getPaperType().equals(4)) {
+                    paperInfo.setEndTime(curDate);
+                    paperInfoDao.save(paperInfo);
+                }
                 examResultDao.saveAll(examResultList);
                 return MessageVo.success();
             }

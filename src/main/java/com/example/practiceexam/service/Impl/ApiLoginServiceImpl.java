@@ -6,6 +6,7 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.config.OnlineUserManager;
 import com.example.practiceexam.config.RoleManager;
 import com.example.practiceexam.dao.*;
+import com.example.practiceexam.model.ClassInfo;
 import com.example.practiceexam.model.StudentInfo;
 import com.example.practiceexam.model.TeacherInfo;
 import com.example.practiceexam.model.UserInfo;
@@ -51,6 +52,8 @@ public class ApiLoginServiceImpl implements ApiLoginService {
     private StudentInfoDao studentInfoDao;
     @Autowired
     private CourseInfoDao courseInfoDao;
+    @Autowired
+    private ClassInfoDao classInfoDao;
 
     @Value("${jwt.secretKey}")
     private String jwtSecretKey;
@@ -219,6 +222,8 @@ public class ApiLoginServiceImpl implements ApiLoginService {
                 if (studentInfo != null) {
                     sharedUser.setStudentId(studentInfo.getStudentId());
                     sharedUser.setClassId(studentInfo.getClassId());
+                    Long courseId = classInfoDao.getCourseIdByClassId(sharedUser.getClassId());
+                    sharedUser.setCourseId(courseId);
                 }
             }
         }

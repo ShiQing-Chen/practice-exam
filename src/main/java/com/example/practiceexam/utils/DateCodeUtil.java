@@ -50,6 +50,14 @@ public class DateCodeUtil {
 
     }
 
+    public static String getDateString(Date date){
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH时mm分");
+        return sdf.format(date);
+    }
+
     public static void main(String[] args) {
         for (int i = 0; i < 1000000; i++) {
             System.out.println(DateCodeUtil.getLocalTrmSeqNum());
