@@ -231,4 +231,18 @@ public class QuestionInfoController {
         return questionInfoService.studentGetQuesListByPaperId(paperId);
     }
 
+    /**
+     * 根据试卷ID获取非选择试题
+     * @param paperId
+     * @return
+     */
+    @RequestMapping(value = "/question/generate/getSubjectiveQuesListByPaperId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getSubjectiveQuesListByPaperId(Long paperId) {
+        if (paperId == null) {
+            return MessageVo.fail("缺少试卷ID参数！");
+        }
+        return questionInfoService.getSubjectiveQuesListByPaperId(paperId);
+    }
+
 }

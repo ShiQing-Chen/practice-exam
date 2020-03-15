@@ -46,7 +46,7 @@ public class PaperInfoDto {
     /**
      * 学生数量
      */
-    private Integer studentCount;
+    private Integer studentTotal;
     /**
      * 发布用户id
      */
@@ -79,6 +79,10 @@ public class PaperInfoDto {
      * 答题结果得分
      */
     private BigDecimal totalScore;
+    /**
+     * 完成学生数量
+     */
+    private Integer finishStudentNumber;
 
     public Long getPaperId() {
         return paperId;
@@ -152,12 +156,12 @@ public class PaperInfoDto {
         this.endTime = endTime;
     }
 
-    public Integer getStudentCount() {
-        return studentCount;
+    public Integer getStudentTotal() {
+        return studentTotal;
     }
 
-    public void setStudentCount(Integer studentCount) {
-        this.studentCount = studentCount;
+    public void setStudentTotal(Integer studentTotal) {
+        this.studentTotal = studentTotal;
     }
 
     public Long getPublishUserId() {
@@ -222,5 +226,13 @@ public class PaperInfoDto {
 
     public void setTotalScore(BigDecimal totalScore) {
         this.totalScore = totalScore;
+    }
+
+    public Integer getFinishStudentNumber() {
+        return finishStudentNumber;
+    }
+
+    public void setFinishStudentNumber(Integer finishStudentNumber) {
+        this.finishStudentNumber = finishStudentNumber;
     }
 }

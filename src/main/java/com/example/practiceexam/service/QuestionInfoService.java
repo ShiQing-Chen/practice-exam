@@ -108,4 +108,11 @@ public interface QuestionInfoService {
      * @return
      */
     MessageVo studentGetQuesListByPaperId(Long paperId);
+
+    /**
+     * 根据试卷ID获取非选择试题
+     * @param paperId
+     * @return
+     */
+    MessageVo getSubjectiveQuesListByPaperId(Long paperId);
 }

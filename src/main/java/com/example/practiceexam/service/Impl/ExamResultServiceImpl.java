@@ -9,6 +9,7 @@ import com.example.practiceexam.dao.PaperInfoDao;
 import com.example.practiceexam.dao.QuestionInfoDao;
 import com.example.practiceexam.dto.ExamResultDto;
 import com.example.practiceexam.form.AddExamResultForm;
+import com.example.practiceexam.form.AddMarkExamResultForm;
 import com.example.practiceexam.model.ExamResult;
 import com.example.practiceexam.model.PaperInfo;
 import com.example.practiceexam.model.QuestionInfo;
@@ -89,6 +90,8 @@ public class ExamResultServiceImpl implements ExamResultService {
                     }
                     examResult.setResultStatus(ExamResult.STATUS_MARK);
                     examResult.setMarkTime(curDate);
+                } else {
+                    examResult.setResultStatus(ExamResult.STATUS_NOT_MARK);
                 }
                 examResultList.add(examResult);
             }
@@ -144,5 +147,52 @@ public class ExamResultServiceImpl implements ExamResultService {
             return MessageVo.success(map);
         }
         return MessageVo.fail("获取数据失败!");
+    }
+
+    /**
+     * 批改
+     * 根据试卷ID和试题ID随机获取未批改的结果
+     * @param paperId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getResultByPaperIdAndQuesId(Long paperId, Long questionId) {
+        if (paperId != null && questionId != null) {
+            List<ExamResult> resultList = examResultDao.getResultByPaperIdAndQuesId(paperId, questionId);
+            if (CollectionUtils.isEmpty(resultList)) {
+                return MessageVo.success();
+            } else {
+                return MessageVo.success(resultList.get(0));
+            }
+        }
+        return MessageVo.fail("获取学生答题情况失败！");
+    }
+
+    /**
+     * 教师批改提交
+     * @param sharedUser
+     * @param form
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public MessageVo markAdd(SharedUser sharedUser, AddMarkExamResultForm form) {
+        if (sharedUser != null && form != null) {
+            ExamResult examResult = examResultDao.getById(form.getResultId());
+            if (examResult == null) {
+                return MessageVo.fail("为获取到该题答题记录！");
+            }
+            if (examResult.getResultStatus() != null && examResult.getResultStatus().equals(2)) {
+                return MessageVo.fail("该学生答题结果已被批改！");
+            }
+            BeanUtils.copyProperties(form, examResult);
+            examResult.setMarkUserId(sharedUser.getUserId());
+            examResult.setMarkTime(new Date());
+            examResult.setResultStatus(2);
+            examResultDao.save(examResult);
+            return MessageVo.success();
+        }
+        return MessageVo.fail("提交失败！");
     }
 }

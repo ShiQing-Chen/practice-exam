@@ -87,4 +87,12 @@ public interface PaperInfoService {
      * @return
      */
     MessageVo studentPracticeGetListByPage(SharedUser sharedUser, PracticeSearchPaperParam param);
+
+    /**
+     * 批改获取试卷列表
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo markGetListByPage(SharedUser sharedUser, SearchPaperParam param);
 }

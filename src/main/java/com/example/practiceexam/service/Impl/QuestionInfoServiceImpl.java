@@ -408,4 +408,35 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
         }
         return MessageVo.fail("获取试题错误！");
     }
+
+    /**
+     * 根据试卷ID获取非选择试题
+     * @param paperId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getSubjectiveQuesListByPaperId(Long paperId) {
+        if (paperId != null) {
+            Map<String, Object> map = Maps.newHashMap();
+            // 获取分数
+            BigDecimal subjectiveScore = paperGenerateDao.getSubjectiveScoreByPaperId(paperId);
+            map.put("subjectiveScore", subjectiveScore);
+
+            List<QuestionInfo> questionInfoList = questionInfoDao.getQuesListByPaperId(paperId, 2);
+            if (CollectionUtils.isEmpty(questionInfoList)) {
+                map.put("list", Lists.newArrayList());
+            } else {
+                List<QuesInfoDto> quesInfoDtoList = questionInfoList.stream().map(e -> {
+                    QuesInfoDto dto = new QuesInfoDto();
+                    BeanUtils.copyProperties(e, dto);
+                    dto.setPaperId(paperId);
+                    return dto;
+                }).collect(Collectors.toList());
+                map.put("list", quesInfoDtoList);
+            }
+            return MessageVo.success(map);
+        }
+        return MessageVo.fail("缺少试卷ID，获取试题错误！");
+    }
 }

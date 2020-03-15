@@ -4,7 +4,7 @@ import com.example.common.cache.SharedUser;
 import com.example.common.util.BindingResultUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddExamResultForm;
-import com.example.practiceexam.form.AddPaperForm;
+import com.example.practiceexam.form.AddMarkExamResultForm;
 import com.example.practiceexam.service.ExamResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,5 +71,39 @@ public class ExamResultController {
             return MessageVo.fail("缺少试卷ID参数！");
         }
         return examResultService.studentGetQuesListByPaperId(sharedUser, paperId);
+    }
+
+    /**
+     * 批改
+     * 根据试卷ID和试题ID随机获取未批改的结果
+     * @param paperId
+     * @return
+     */
+    @RequestMapping(value = "/examResult/mark/getResultByPaperIdAndQuesId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getResultByPaperIdAndQuesId(Long paperId, Long questionId) {
+        if (paperId == null) {
+            return MessageVo.fail("缺少试卷ID参数！");
+        }
+        if (questionId == null) {
+            return MessageVo.fail("缺少试题ID参数！");
+        }
+        return examResultService.getResultByPaperIdAndQuesId(paperId, questionId);
+    }
+
+    /**
+     * 教师批改提交
+     * @param sharedUser
+     * @param form
+     * @param bindingResult
+     * @return
+     */
+    @RequestMapping(value = "/examResult/mark/add", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo markAdd(SharedUser sharedUser, @RequestBody @Valid AddMarkExamResultForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return examResultService.markAdd(sharedUser, form);
     }
 }

@@ -59,6 +59,17 @@ public interface QuestionInfoDao extends JpaRepository<QuestionInfo, Long>, Ques
     List<QuestionInfo> getQuesListByPaperId(Long paperId);
 
     /**
+     * 根据试卷ID获取试题
+     * @param paperId 试卷ID
+     * @param quesType 试题类型
+     * @return
+     */
+    @Query(value = "select q.* from paper_generate pg " +
+            "left join question_info q on pg.question_id = q.question_id " +
+            "where pg.paper_id=?1 and q.question_type =?2 order by pg.order_number", nativeQuery = true)
+    List<QuestionInfo> getQuesListByPaperId(Long paperId, Integer quesType);
+
+    /**
      * 随机获取到某课程下
      * 已经审核的试题
      * @param courseId 课程ID

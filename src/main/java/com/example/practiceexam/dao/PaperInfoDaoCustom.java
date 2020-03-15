@@ -58,4 +58,21 @@ public interface PaperInfoDaoCustom {
      * @return
      */
     Integer studentPracticeGetCountByPage(PracticeSearchPaperParam param);
+
+
+    /**
+     * 批改获取
+     * 分页查询
+     * @param param
+     * @return
+     */
+    List<PaperInfoDto> markGetListByPage(SearchPaperParam param);
+
+    /**
+     * 批改获取
+     * 分页查询
+     * @param param
+     * @return
+     */
+    Integer markGetCountByPage(SearchPaperParam param);
 }

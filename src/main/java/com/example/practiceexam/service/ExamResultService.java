@@ -3,6 +3,7 @@ package com.example.practiceexam.service;
 import com.example.common.cache.SharedUser;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddExamResultForm;
+import com.example.practiceexam.form.AddMarkExamResultForm;
 
 /**
  * @author ShiQing_Chen  2020/3/15  15:22
@@ -29,4 +30,20 @@ public interface ExamResultService {
      * @return
      */
     MessageVo studentGetQuesListByPaperId(SharedUser sharedUser, Long paperId);
+
+    /**
+     * 批改
+     * 根据试卷ID和试题ID随机获取未批改的结果
+     * @param paperId
+     * @return
+     */
+    MessageVo getResultByPaperIdAndQuesId(Long paperId, Long questionId);
+
+    /**
+     * 教师批改提交
+     * @param sharedUser
+     * @param form
+     * @return
+     */
+    MessageVo markAdd(SharedUser sharedUser, AddMarkExamResultForm form);
 }

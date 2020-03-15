@@ -245,10 +245,14 @@ public class PaperInfoServiceImpl implements PaperInfoService {
     @Transactional(readOnly = true)
     public MessageVo studentGetListByPage(SharedUser sharedUser, StudentSearchPaperParam param) {
         if (param != null && sharedUser != null) {
+            if (sharedUser.getStudentId()==null){
+                return MessageVo.fail("当前用户未绑定学生信息，无法获取数据！");
+            }
             if (sharedUser.getClassId() == null) {
                 return MessageVo.fail("当前学生未绑定班级，无法获取数据！");
             }
             param.setClassId(sharedUser.getClassId());
+            param.setStudentId(sharedUser.getStudentId());
             param.setPaperStatus(PaperInfo.STATUS_PUBLIC);
             List<PaperInfoDto> list = paperInfoDao.studentGetListByPage(param);
             Integer count = paperInfoDao.studentGetCountByPage(param);
@@ -306,7 +310,7 @@ public class PaperInfoServiceImpl implements PaperInfoService {
                 if (!CollectionUtils.isEmpty(generateList)) {
                     paperGenerateDao.saveAll(generateList);
                 }
-            }else {
+            } else {
                 return MessageVo.fail("自由练习生成失败，未查询到题库的试题！");
             }
             return MessageVo.success(paperInfo);
@@ -327,6 +331,28 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             param.setCreateUserId(sharedUser.getUserId());
             List<PaperInfoDto> list = paperInfoDao.studentPracticeGetListByPage(param);
             Integer count = paperInfoDao.studentPracticeGetCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 批改获取试卷列表
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo markGetListByPage(SharedUser sharedUser, SearchPaperParam param) {
+        if (param != null && sharedUser != null) {
+            param.setCreateUserId(sharedUser.getUserId());
+            List<PaperInfoDto> list = paperInfoDao.markGetListByPage(param);
+            Integer count = paperInfoDao.markGetCountByPage(param);
             Map<String, Object> map = Maps.newHashMap();
             map.put("list", list);
             map.put("total", count);

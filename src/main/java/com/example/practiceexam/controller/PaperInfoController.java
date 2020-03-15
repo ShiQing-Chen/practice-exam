@@ -193,4 +193,22 @@ public class PaperInfoController {
         }
         return paperInfoService.studentPracticeGetListByPage(sharedUser, param);
     }
+
+    /**
+     * 批改获取试卷列表
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/paper/mark/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo markGetListByPage(SharedUser sharedUser, @RequestBody @Valid SearchPaperParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取试卷数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return paperInfoService.markGetListByPage(sharedUser, param);
+    }
 }
