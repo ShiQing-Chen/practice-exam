@@ -29,7 +29,7 @@ public class PaperGenerate {
     /**
      * 试题分数
      */
-    private BigDecimal questionScore;
+    private BigDecimal questionScore = BigDecimal.ZERO;
     /**
      * 试题序号
      */
