@@ -69,6 +69,13 @@ public interface ClassInfoService {
     MessageVo getListClassAndMajor();
 
     /**
+     * 根据试卷ID
+     * 获取专业名称列表、班级列表
+     * @return
+     */
+    MessageVo getListClassAndMajorByPaperId(Long paperId);
+
+    /**
      * 远程模糊查询班级信息
      * @return
      */

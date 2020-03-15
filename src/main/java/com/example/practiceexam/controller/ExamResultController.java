@@ -74,6 +74,25 @@ public class ExamResultController {
     }
 
     /**
+     * 获取学生 答题结果
+     * 根据试卷ID、学生ID获取试题
+     * @param paperId   试卷ID
+     * @param studentId 学生ID
+     * @return
+     */
+    @RequestMapping(value = "/examResult/score/getQuesListByPaperIdAndStudentId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getQuesListByPaperIdAndStudentId(Long paperId, Long studentId) {
+        if (paperId == null) {
+            return MessageVo.fail("缺少试卷ID参数！");
+        }
+        if (studentId == null) {
+            return MessageVo.fail("缺少学生ID参数！");
+        }
+        return examResultService.getQuesListByPaperIdAndStudentId(paperId, studentId);
+    }
+
+    /**
      * 批改
      * 根据试卷ID和试题ID随机获取未批改的结果
      * @param paperId

@@ -7,6 +7,15 @@ public class ValueLabelDto {
     private Long value;
     private String label;
 
+    public ValueLabelDto() {
+        // default
+    }
+
+    public ValueLabelDto(Long value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
     public Long getValue() {
         return value;
     }

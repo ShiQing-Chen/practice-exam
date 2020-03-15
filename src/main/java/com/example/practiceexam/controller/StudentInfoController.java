@@ -6,6 +6,7 @@ import com.example.common.util.ExcelUtil;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddStudentForm;
 import com.example.practiceexam.form.UpdateStudentForm;
+import com.example.practiceexam.param.ScoreSearchStudentParam;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.example.practiceexam.service.StudentInfoService;
 import com.example.practiceexam.vo.AddStudentVo;
@@ -305,6 +306,24 @@ public class StudentInfoController extends BaseExcelController {
             return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return studentInfoService.teacherGetListByPage(sharedUser, studentParam);
+    }
+
+    /**
+     * 根据试卷ID获取学生分数
+     * 分页查询
+     * @param studentParam
+     * @return
+     */
+    @RequestMapping(value = "/student/score/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo scoreGetListByPage(SharedUser sharedUser, @RequestBody @Valid ScoreSearchStudentParam studentParam, BindingResult bindingResult) {
+        if (studentParam == null) {
+            return MessageVo.fail("获取学生数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return studentInfoService.scoreGetListByPage(sharedUser, studentParam);
     }
 
 }

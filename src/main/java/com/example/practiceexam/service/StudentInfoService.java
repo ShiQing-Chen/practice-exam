@@ -4,6 +4,7 @@ import com.example.common.cache.SharedUser;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddStudentForm;
 import com.example.practiceexam.form.UpdateStudentForm;
+import com.example.practiceexam.param.ScoreSearchStudentParam;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.example.practiceexam.vo.AddStudentVo;
 
@@ -79,4 +80,12 @@ public interface StudentInfoService {
      * @return
      */
     MessageVo teacherGetListByPage(SharedUser sharedUser, SearchStudentParam studentParam);
+
+    /**
+     * 根据试卷ID获取学生分数
+     * 分页查询
+     * @param studentParam
+     * @return
+     */
+    MessageVo scoreGetListByPage(SharedUser sharedUser, ScoreSearchStudentParam studentParam);
 }

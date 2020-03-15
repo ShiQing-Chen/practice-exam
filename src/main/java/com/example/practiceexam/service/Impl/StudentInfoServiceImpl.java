@@ -4,15 +4,18 @@ import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
 import com.example.practiceexam.dao.ClassInfoDao;
+import com.example.practiceexam.dao.PaperClassDao;
 import com.example.practiceexam.dao.StudentInfoDao;
 import com.example.practiceexam.dao.UserInfoDao;
 import com.example.practiceexam.dto.StudentDto;
 import com.example.practiceexam.dto.StudentInfoDto;
+import com.example.practiceexam.dto.StudentScoreDto;
 import com.example.practiceexam.form.AddStudentForm;
 import com.example.practiceexam.form.UpdateStudentForm;
 import com.example.practiceexam.model.StudentInfo;
 import com.example.practiceexam.model.TeacherInfo;
 import com.example.practiceexam.model.UserInfo;
+import com.example.practiceexam.param.ScoreSearchStudentParam;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.example.practiceexam.service.StudentInfoService;
 import com.example.practiceexam.vo.AddStudentVo;
@@ -43,6 +46,9 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Autowired
     private ClassInfoDao classInfoDao;
+
+    @Autowired
+    private PaperClassDao paperClassDao;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -326,6 +332,32 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             studentParam.setClassIdList(classIdList);
             List<StudentDto> userInfoList = studentInfoDao.getListByPage(studentParam);
             Integer count = studentInfoDao.getCountByPage(studentParam);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", userInfoList);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 根据试卷ID获取学生分数
+     * 分页查询
+     * @param studentParam
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo scoreGetListByPage(SharedUser sharedUser, ScoreSearchStudentParam studentParam) {
+        if (studentParam != null) {
+            List<Long> classIdList = paperClassDao.getClassIdsByPaperId(studentParam.getPaperId());
+            if (CollectionUtils.isEmpty(classIdList)) {
+                return MessageVo.fail("当前试卷未分发给任何班级！");
+            }
+            studentParam.setClassIdList(classIdList);
+            List<StudentScoreDto> userInfoList = studentInfoDao.scoreGetListByPage(studentParam);
+            Integer count = studentInfoDao.scoreGetCountByPage(studentParam);
             Map<String, Object> map = Maps.newHashMap();
             map.put("list", userInfoList);
             map.put("total", count);

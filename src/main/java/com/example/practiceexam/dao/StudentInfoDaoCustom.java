@@ -1,6 +1,8 @@
 package com.example.practiceexam.dao;
 
 import com.example.practiceexam.dto.StudentDto;
+import com.example.practiceexam.dto.StudentScoreDto;
+import com.example.practiceexam.param.ScoreSearchStudentParam;
 import com.example.practiceexam.param.SearchStudentParam;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +26,20 @@ public interface StudentInfoDaoCustom {
      * @return
      */
     Integer getCountByPage(SearchStudentParam param);
+
+    /**
+     * 根据试卷ID获取学生分数
+     * 分页查询
+     * @param param
+     * @return
+     */
+    List<StudentScoreDto> scoreGetListByPage(ScoreSearchStudentParam param);
+
+    /**
+     * 根据试卷ID获取学生分数
+     * 分页查询
+     * @param param
+     * @return
+     */
+    Integer scoreGetCountByPage(ScoreSearchStudentParam param);
 }

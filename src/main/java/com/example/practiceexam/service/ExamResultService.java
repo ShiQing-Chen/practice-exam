@@ -32,6 +32,15 @@ public interface ExamResultService {
     MessageVo studentGetQuesListByPaperId(SharedUser sharedUser, Long paperId);
 
     /**
+     * 获取学生 答题结果
+     * 根据试卷ID、学生ID获取试题
+     * @param paperId   试卷ID
+     * @param studentId 学生ID
+     * @return
+     */
+    MessageVo getQuesListByPaperIdAndStudentId(Long paperId, Long studentId);
+
+    /**
      * 批改
      * 根据试卷ID和试题ID随机获取未批改的结果
      * @param paperId

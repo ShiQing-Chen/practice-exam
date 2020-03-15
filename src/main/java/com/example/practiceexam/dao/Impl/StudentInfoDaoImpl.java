@@ -2,6 +2,8 @@ package com.example.practiceexam.dao.Impl;
 
 import com.example.practiceexam.dao.StudentInfoDaoCustom;
 import com.example.practiceexam.dto.StudentDto;
+import com.example.practiceexam.dto.StudentScoreDto;
+import com.example.practiceexam.param.ScoreSearchStudentParam;
 import com.example.practiceexam.param.SearchStudentParam;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -134,6 +136,118 @@ public class StudentInfoDaoImpl implements StudentInfoDaoCustom {
         if (StringUtils.isNotBlank(param.getClassName())) {
             sqlSb.append(" AND c.class_name = :className ");
             paramMap.put("className", param.getClassName());
+        }
+        Session session = entityManager.unwrap(Session.class);
+        NativeQuery query = session.createSQLQuery(sqlSb.toString());
+        query.addScalar("count", StandardBasicTypes.LONG);
+        if (!CollectionUtils.isEmpty(paramMap)) {
+            for (Map.Entry<String, Object> m : paramMap.entrySet()) {
+                query.setParameter(m.getKey(), m.getValue());
+            }
+        }
+        Long count = (Long) query.uniqueResult();
+        if (count != null) {
+            return count.intValue();
+        }
+        return 0;
+    }
+
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public List<StudentScoreDto> scoreGetListByPage(ScoreSearchStudentParam param) {
+        if (param == null || param.getPaperId() == null) {
+            return Lists.newArrayList();
+        }
+        StringBuilder sqlSb = new StringBuilder();
+        sqlSb.append(" select s.student_id studentId, s.student_number studentNumber, ");
+        sqlSb.append(" s.student_name studentName, s.class_id classId, c.class_name className, ");
+        sqlSb.append(" c.grade grade, c.major_name majorName, SUM(er.result_score) score ");
+        sqlSb.append(" from student_info s left join user_info u on s.user_id=u.user_id ");
+        sqlSb.append(" left join class_info c on s.class_id = c.class_id ");
+        sqlSb.append(" left join exam_result er on er.student_id = s.student_id and er.paper_id =:paperId ");
+        sqlSb.append(" where 1=1 ");
+        Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("paperId", param.getPaperId());
+        if (param.getClassId() != null) {
+            sqlSb.append(" AND s.class_id = :classId ");
+            paramMap.put("classId", param.getClassId());
+        }
+        if (!CollectionUtils.isEmpty(param.getClassIdList())) {
+            sqlSb.append(" AND s.class_id in (:classIdList) ");
+            paramMap.put("classIdList", param.getClassIdList());
+        }
+        if (StringUtils.isNotEmpty(param.getSearch())) {
+            sqlSb.append(" AND (s.student_number LIKE :search or s.student_name LIKE :search) ");
+            paramMap.put("search", "%" + param.getSearch() + "%");
+        }
+        if (StringUtils.isNotBlank(param.getGrade())) {
+            sqlSb.append(" AND c.grade = :grade ");
+            paramMap.put("grade", param.getGrade());
+        }
+        if (StringUtils.isNotBlank(param.getMajorName())) {
+            sqlSb.append(" AND c.major_name = :majorName ");
+            paramMap.put("majorName", param.getMajorName());
+        }
+        sqlSb.append(" group by s.student_id ");
+        if ("desc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
+            sqlSb.append(" order by ").append(param.getSort()).append(" desc");
+        } else if ("asc".equals(param.getOrder()) && StringUtils.isNotBlank(param.getSort())) {
+            sqlSb.append(" order by ").append(param.getSort()).append(" asc");
+        }
+        Session session = entityManager.unwrap(Session.class);
+        NativeQuery query = session.createSQLQuery(sqlSb.toString());
+        query.addScalar("studentId", StandardBasicTypes.LONG)
+                .addScalar("studentNumber", StandardBasicTypes.STRING)
+                .addScalar("studentName", StandardBasicTypes.STRING)
+                .addScalar("classId", StandardBasicTypes.LONG)
+                .addScalar("className", StandardBasicTypes.STRING)
+                .addScalar("grade", StandardBasicTypes.STRING)
+                .addScalar("majorName", StandardBasicTypes.STRING)
+                .addScalar("score", StandardBasicTypes.BIG_DECIMAL);
+        if (!CollectionUtils.isEmpty(paramMap)) {
+            for (Map.Entry<String, Object> m : paramMap.entrySet()) {
+                query.setParameter(m.getKey(), m.getValue());
+            }
+        }
+        query.setFirstResult(param.getOffset());
+        query.setMaxResults(param.getLimit());
+        query.unwrap(NativeQueryImpl.class).setResultTransformer(Transformers.aliasToBean(StudentScoreDto.class));
+        return query.list();
+    }
+
+    @SuppressWarnings({"unchecked", "Duplicates"})
+    @Override
+    public Integer scoreGetCountByPage(ScoreSearchStudentParam param) {
+        if (param == null || param.getPaperId() == null) {
+            return 0;
+        }
+        StringBuilder sqlSb = new StringBuilder();
+        sqlSb.append(" select COUNT(distinct s.student_id) count ");
+        sqlSb.append(" from student_info s left join user_info u on s.user_id=u.user_id ");
+        sqlSb.append(" left join class_info c on s.class_id = c.class_id ");
+        sqlSb.append(" left join exam_result er on er.student_id = s.student_id and er.paper_id =:paperId ");
+        sqlSb.append(" where 1=1 ");
+        Map<String, Object> paramMap = Maps.newHashMap();
+        paramMap.put("paperId", param.getPaperId());
+        if (param.getClassId() != null) {
+            sqlSb.append(" AND s.class_id = :classId ");
+            paramMap.put("classId", param.getClassId());
+        }
+        if (!CollectionUtils.isEmpty(param.getClassIdList())) {
+            sqlSb.append(" AND s.class_id in (:classIdList) ");
+            paramMap.put("classIdList", param.getClassIdList());
+        }
+        if (StringUtils.isNotEmpty(param.getSearch())) {
+            sqlSb.append(" AND (s.student_number LIKE :search or s.student_name LIKE :search) ");
+            paramMap.put("search", "%" + param.getSearch() + "%");
+        }
+        if (StringUtils.isNotBlank(param.getGrade())) {
+            sqlSb.append(" AND c.grade = :grade ");
+            paramMap.put("grade", param.getGrade());
+        }
+        if (StringUtils.isNotBlank(param.getMajorName())) {
+            sqlSb.append(" AND c.major_name = :majorName ");
+            paramMap.put("majorName", param.getMajorName());
         }
         Session session = entityManager.unwrap(Session.class);
         NativeQuery query = session.createSQLQuery(sqlSb.toString());

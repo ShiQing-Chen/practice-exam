@@ -150,6 +150,20 @@ public class ClassInfoController {
     }
 
     /**
+     * 根据试卷ID
+     * 获取专业名称列表、班级列表
+     * @return
+     */
+    @RequestMapping(value = "/class/getListClassAndMajorByPaperId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo getListClassAndMajorByPaperId(Long paperId) {
+        if (paperId==null){
+            return MessageVo.fail("缺少试卷ID参数");
+        }
+        return classInfoService.getListClassAndMajorByPaperId(paperId);
+    }
+
+    /**
      * 远程模糊查询班级信息
      * @return
      */

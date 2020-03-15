@@ -3,16 +3,14 @@ package com.example.practiceexam.service.Impl;
 import com.example.common.cache.SharedUser;
 import com.example.common.util.IdGeneratorUtils;
 import com.example.common.vo.MessageVo;
-import com.example.practiceexam.dao.ExamResultDao;
-import com.example.practiceexam.dao.PaperGenerateDao;
-import com.example.practiceexam.dao.PaperInfoDao;
-import com.example.practiceexam.dao.QuestionInfoDao;
+import com.example.practiceexam.dao.*;
 import com.example.practiceexam.dto.ExamResultDto;
 import com.example.practiceexam.form.AddExamResultForm;
 import com.example.practiceexam.form.AddMarkExamResultForm;
 import com.example.practiceexam.model.ExamResult;
 import com.example.practiceexam.model.PaperInfo;
 import com.example.practiceexam.model.QuestionInfo;
+import com.example.practiceexam.model.StudentInfo;
 import com.example.practiceexam.service.ExamResultService;
 import com.example.practiceexam.vo.StudentSubmitExamResultVo;
 import com.google.common.collect.Lists;
@@ -43,6 +41,8 @@ public class ExamResultServiceImpl implements ExamResultService {
     private QuestionInfoDao questionInfoDao;
     @Autowired
     private PaperInfoDao paperInfoDao;
+    @Autowired
+    private StudentInfoDao studentInfoDao;
 
     /**
      * 添加
@@ -144,6 +144,29 @@ public class ExamResultServiceImpl implements ExamResultService {
             Map<String, Object> map = Maps.newHashMap();
             map.put("list", dtoList);
             map.put("totalScore", totalScore);
+            return MessageVo.success(map);
+        }
+        return MessageVo.fail("获取数据失败!");
+    }
+
+    /**
+     * 获取学生 答题结果
+     * 根据试卷ID、学生ID获取试题
+     * @param paperId   试卷ID
+     * @param studentId 学生ID
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getQuesListByPaperIdAndStudentId(Long paperId, Long studentId) {
+        if (studentId != null && paperId != null) {
+            List<ExamResultDto> dtoList = examResultDao.getQuesListByPaperIdAndStudent(paperId, studentId);
+            BigDecimal totalScore = examResultDao.getStudentScoreByPaperIdAndStudentId(paperId, studentId);
+            StudentInfo studentInfo = studentInfoDao.getById(studentId);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", dtoList);
+            map.put("totalScore", totalScore);
+            map.put("studentInfo", studentInfo);
             return MessageVo.success(map);
         }
         return MessageVo.fail("获取数据失败!");

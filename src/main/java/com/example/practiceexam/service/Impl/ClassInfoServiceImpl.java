@@ -25,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ShiQing_Chen  2020/3/5  18:04
@@ -196,6 +197,34 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         map.put("classNameList", classNameList);
         map.put("majorNameList", majorNameList);
         return MessageVo.success(map);
+    }
+
+    /**
+     * 根据试卷ID
+     * 获取专业名称列表、班级列表
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo getListClassAndMajorByPaperId(Long paperId) {
+        if (paperId!=null){
+            List<ClassInfo> classInfoList = classInfoDao.getListByPaperId(paperId);
+            Map<String, Object> map = Maps.newHashMap();
+            if (!CollectionUtils.isEmpty(classInfoList)) {
+                List<String> majorNameList = classInfoList.stream()
+                        .filter(e -> StringUtils.isNotBlank(e.getMajorName()))
+                        .map(ClassInfo::getMajorName).distinct()
+                        .collect(Collectors.toList());
+                List<ValueLabelDto> classNameList = classInfoList.stream()
+                        .filter(e -> StringUtils.isNotBlank(e.getMajorName()))
+                        .map(e-> new ValueLabelDto(e.getClassId(), e.getClassName())).distinct()
+                        .collect(Collectors.toList());
+                map.put("classNameList", classNameList);
+                map.put("majorNameList", majorNameList);
+            }
+            return MessageVo.success(map);
+        }
+        return MessageVo.fail("获取数据失败！");
     }
 
     /**
