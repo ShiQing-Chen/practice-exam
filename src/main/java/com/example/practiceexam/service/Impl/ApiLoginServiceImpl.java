@@ -218,6 +218,7 @@ public class ApiLoginServiceImpl implements ApiLoginService {
                 StudentInfo studentInfo = studentInfoDao.getStudentByUserId(sharedUser.getUserId());
                 if (studentInfo != null) {
                     sharedUser.setStudentId(studentInfo.getStudentId());
+                    sharedUser.setClassId(studentInfo.getClassId());
                 }
             }
         }

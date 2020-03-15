@@ -8,6 +8,7 @@ import com.example.practiceexam.dao.PaperInfoDao;
 import com.example.practiceexam.dao.QuestionInfoDao;
 import com.example.practiceexam.dto.GenerateQuesDto;
 import com.example.practiceexam.dto.QuesDto;
+import com.example.practiceexam.dto.QuesInfoDto;
 import com.example.practiceexam.form.AddQuesForm;
 import com.example.practiceexam.form.UpdateQuesForm;
 import com.example.practiceexam.model.PaperInfo;
@@ -29,6 +30,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ShiQing_Chen  2020/3/12  02:00
@@ -247,17 +249,31 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
     public MessageVo getQuesListByPaperId(Long paperId) {
         if (paperId != null) {
             Map<String, Object> map = Maps.newHashMap();
-            List<QuestionInfo> questionInfoList = questionInfoDao.getQuesListByPaperId(paperId);
-            if (CollectionUtils.isEmpty(questionInfoList)) {
-                map.put("list", Lists.newArrayList());
-            } else {
-                map.put("list", questionInfoList);
-            }
             // 获取分数
             BigDecimal choiceScore = paperGenerateDao.getChoiceScoreByPaperId(paperId);
             BigDecimal subjectiveScore = paperGenerateDao.getSubjectiveScoreByPaperId(paperId);
             map.put("choiceScore", choiceScore);
             map.put("subjectiveScore", subjectiveScore);
+
+            List<QuestionInfo> questionInfoList = questionInfoDao.getQuesListByPaperId(paperId);
+            if (CollectionUtils.isEmpty(questionInfoList)) {
+                map.put("list", Lists.newArrayList());
+            } else {
+                List<QuesInfoDto> quesInfoDtoList = questionInfoList.stream().map(e -> {
+                    QuesInfoDto dto = new QuesInfoDto();
+                    BeanUtils.copyProperties(e, dto);
+                    dto.setPaperId(paperId);
+                    if (e.getQuestionType() != null) {
+                        if (e.getQuestionType().equals(1)) {
+                            dto.setQuestionScore(choiceScore);
+                        } else if (e.getQuestionType().equals(2)) {
+                            dto.setQuestionScore(subjectiveScore);
+                        }
+                    }
+                    return dto;
+                }).collect(Collectors.toList());
+                map.put("list", quesInfoDtoList);
+            }
             return MessageVo.success(map);
         }
         return MessageVo.fail("获取试题错误！");
@@ -342,5 +358,48 @@ public class QuestionInfoServiceImpl implements QuestionInfoService {
             }
         }
         return MessageVo.fail("获取试题失败！");
+    }
+
+    /**
+     * 学生
+     * 根据试卷ID获取试题
+     * @param paperId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo studentGetQuesListByPaperId(Long paperId) {
+        if (paperId != null) {
+            Map<String, Object> map = Maps.newHashMap();
+            // 获取分数
+            BigDecimal choiceScore = paperGenerateDao.getChoiceScoreByPaperId(paperId);
+            BigDecimal subjectiveScore = paperGenerateDao.getSubjectiveScoreByPaperId(paperId);
+            map.put("choiceScore", choiceScore);
+            map.put("subjectiveScore", subjectiveScore);
+
+            List<QuestionInfo> questionInfoList = questionInfoDao.getQuesListByPaperId(paperId);
+            if (CollectionUtils.isEmpty(questionInfoList)) {
+                map.put("list", Lists.newArrayList());
+            } else {
+                List<QuesInfoDto> quesInfoDtoList = questionInfoList.stream().map(e -> {
+                    QuesInfoDto dto = new QuesInfoDto();
+                    BeanUtils.copyProperties(e, dto);
+                    dto.setQuestionAnswer(null);
+                    dto.setQuestionAnalyze(null);
+                    dto.setPaperId(paperId);
+                    if (e.getQuestionType() != null) {
+                        if (e.getQuestionType().equals(1)) {
+                            dto.setQuestionScore(choiceScore);
+                        } else if (e.getQuestionType().equals(2)) {
+                            dto.setQuestionScore(subjectiveScore);
+                        }
+                    }
+                    return dto;
+                }).collect(Collectors.toList());
+                map.put("list", quesInfoDtoList);
+            }
+            return MessageVo.success(map);
+        }
+        return MessageVo.fail("获取试题错误！");
     }
 }

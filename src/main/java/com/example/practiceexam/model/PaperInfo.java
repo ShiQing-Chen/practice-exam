@@ -46,6 +46,14 @@ public class PaperInfo {
      */
     private Integer paperStatus;
     /**
+     * 开始时间
+     */
+    private Date startTime;
+    /**
+     * 结束时间
+     */
+    private Date endTime;
+    /**
      * 发布用户id
      */
     private Long publishUserId;
@@ -112,6 +120,22 @@ public class PaperInfo {
 
     public void setPaperStatus(Integer paperStatus) {
         this.paperStatus = paperStatus;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Long getPublishUserId() {

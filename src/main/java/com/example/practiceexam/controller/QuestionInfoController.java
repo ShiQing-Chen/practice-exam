@@ -216,4 +216,19 @@ public class QuestionInfoController {
         return questionInfoService.getReadyReviewByTeacher(sharedUser);
     }
 
+    /**
+     * 学生
+     * 根据试卷ID获取试题
+     * @param paperId
+     * @return
+     */
+    @RequestMapping(value = "/question/generate/studentGetQuesListByPaperId", method = RequestMethod.GET)
+    @ResponseBody
+    public MessageVo studentGetQuesListByPaperId(Long paperId) {
+        if (paperId == null) {
+            return MessageVo.fail("缺少试卷ID参数！");
+        }
+        return questionInfoService.studentGetQuesListByPaperId(paperId);
+    }
+
 }

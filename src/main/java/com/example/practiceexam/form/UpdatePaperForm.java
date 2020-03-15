@@ -3,6 +3,7 @@ package com.example.practiceexam.form;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +39,14 @@ public class UpdatePaperForm {
      */
     @NotNull(message = "试卷状态不能为空！")
     private Integer paperStatus;
+    /**
+     * 开始时间
+     */
+    private Date startTime;
+    /**
+     * 结束时间
+     */
+    private Date endTime;
     /**
      * 班级列表
      */
@@ -89,6 +98,22 @@ public class UpdatePaperForm {
 
     public void setPaperStatus(Integer paperStatus) {
         this.paperStatus = paperStatus;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public List<Long> getClassList() {

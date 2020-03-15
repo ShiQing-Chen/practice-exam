@@ -14,6 +14,7 @@ import com.example.practiceexam.model.PaperClass;
 import com.example.practiceexam.model.PaperInfo;
 import com.example.practiceexam.model.UserInfo;
 import com.example.practiceexam.param.SearchPaperParam;
+import com.example.practiceexam.param.StudentSearchPaperParam;
 import com.example.practiceexam.service.PaperInfoService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -221,6 +222,32 @@ public class PaperInfoServiceImpl implements PaperInfoService {
             param.setCreateUserId(sharedUser.getUserId());
             List<PaperInfoDto> list = paperInfoDao.getListByPage(param);
             Integer count = paperInfoDao.getCountByPage(param);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("list", list);
+            map.put("total", count);
+            return MessageVo.success(map);
+        } else {
+            return MessageVo.success(Lists.newArrayList());
+        }
+    }
+
+    /**
+     * 学生
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public MessageVo studentGetListByPage(SharedUser sharedUser, StudentSearchPaperParam param) {
+        if (param != null && sharedUser != null) {
+            if (sharedUser.getClassId() == null) {
+                return MessageVo.fail("当前学生未绑定班级，无法获取数据！");
+            }
+            param.setClassId(sharedUser.getClassId());
+            param.setPaperStatus(PaperInfo.STATUS_PUBLIC);
+            List<PaperInfoDto> list = paperInfoDao.studentGetListByPage(param);
+            Integer count = paperInfoDao.studentGetCountByPage(param);
             Map<String, Object> map = Maps.newHashMap();
             map.put("list", list);
             map.put("total", count);

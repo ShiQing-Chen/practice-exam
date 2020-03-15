@@ -6,6 +6,7 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddPaperForm;
 import com.example.practiceexam.form.UpdatePaperForm;
 import com.example.practiceexam.param.SearchPaperParam;
+import com.example.practiceexam.param.StudentSearchPaperParam;
 import com.example.practiceexam.service.PaperInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -139,5 +140,23 @@ public class PaperInfoController {
             return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
         }
         return paperInfoService.teacherGetListByPage(sharedUser, param);
+    }
+
+    /**
+     * 学生
+     * 分页查询
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/paper/student/getListByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public MessageVo studentGetListByPage(SharedUser sharedUser, @RequestBody @Valid StudentSearchPaperParam param, BindingResult bindingResult) {
+        if (param == null) {
+            return MessageVo.fail("获取试卷数据失败！");
+        }
+        if (bindingResult.hasErrors()) {
+            return MessageVo.fail(BindingResultUtils.getErrorString(bindingResult));
+        }
+        return paperInfoService.studentGetListByPage(sharedUser, param);
     }
 }

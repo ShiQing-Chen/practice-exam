@@ -229,6 +229,8 @@ CREATE TABLE `paper_info` (
   `do_time` int DEFAULT NULL COMMENT '检测时长 (分钟)',
   `paper_type` smallint(6) DEFAULT NULL COMMENT '试卷类型 1考试 2测试 3练习',
   `paper_status` smallint(6) DEFAULT 1 COMMENT '试卷状态 1草稿 2发布',
+  `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
   `publish_user_id` bigint(20) DEFAULT NULL COMMENT '发布用户id',
   `publish_time` datetime DEFAULT NULL COMMENT '发布时间',
   `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
@@ -261,3 +263,24 @@ CREATE TABLE `paper_generate` (
   PRIMARY KEY (`generate_id`),
     key `idx_paper_id` (`paper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '组卷信息表';
+
+DROP TABLE IF EXISTS `exam_result`;
+CREATE TABLE `exam_result` (
+  `result_id` bigint(20) NOT NULL COMMENT '结果ID',
+  `paper_id` bigint(20) NOT NULL COMMENT '试卷ID',
+  `student_id` bigint(20) NOT NULL COMMENT '学生ID',
+  `question_id` bigint(20) NOT NULL COMMENT '试题ID',
+  `result_answer` varchar(800) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '学生答案',
+  `result_status` smallint(6) DEFAULT 1 COMMENT '批改状态 1未批改 2已批改',
+  `result_opinion` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '教师批改意见',
+  `result_score` decimal(4,2) DEFAULT 0 COMMENT '试题得分',
+  `create_user_id` bigint(20) NOT NULL COMMENT '创建用户id',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `mark_user_id` bigint(20) DEFAULT NULL COMMENT '批改人id',
+  `mark_time` datetime DEFAULT NULL COMMENT '批改时间',
+  PRIMARY KEY (`result_id`),
+    key `idx_paper_id` (`paper_id`),
+    key `idx_student_id` (`student_id`),
+    key `idx_question_id` (`question_id`),
+    key `idx_result_status` (`result_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '学生答题结果表';

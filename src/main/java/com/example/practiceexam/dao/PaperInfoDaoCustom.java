@@ -2,6 +2,7 @@ package com.example.practiceexam.dao;
 
 import com.example.practiceexam.dto.PaperInfoDto;
 import com.example.practiceexam.param.SearchPaperParam;
+import com.example.practiceexam.param.StudentSearchPaperParam;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,20 @@ public interface PaperInfoDaoCustom {
      * @return
      */
     Integer getCountByPage(SearchPaperParam param);
+
+    /**
+     * 学生
+     * 分页查询
+     * @param param
+     * @return
+     */
+    List<PaperInfoDto> studentGetListByPage(StudentSearchPaperParam param);
+
+    /**
+     * 学生
+     * 分页查询
+     * @param param
+     * @return
+     */
+    Integer studentGetCountByPage(StudentSearchPaperParam param);
 }

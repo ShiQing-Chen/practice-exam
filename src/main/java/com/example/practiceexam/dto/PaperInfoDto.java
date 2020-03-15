@@ -35,6 +35,14 @@ public class PaperInfoDto {
      */
     private Integer paperStatus;
     /**
+     * 开始时间
+     */
+    private Date startTime;
+    /**
+     * 结束时间
+     */
+    private Date endTime;
+    /**
      * 学生数量
      */
     private Integer studentCount;
@@ -62,6 +70,10 @@ public class PaperInfoDto {
      * 创建时间
      */
     private Date createTime;
+    /**
+     * 答题结果数量
+     */
+    private Integer resultNumber;
 
     public Long getPaperId() {
         return paperId;
@@ -119,6 +131,22 @@ public class PaperInfoDto {
         this.paperStatus = paperStatus;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
     public Integer getStudentCount() {
         return studentCount;
     }
@@ -173,5 +201,13 @@ public class PaperInfoDto {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getResultNumber() {
+        return resultNumber;
+    }
+
+    public void setResultNumber(Integer resultNumber) {
+        this.resultNumber = resultNumber;
     }
 }

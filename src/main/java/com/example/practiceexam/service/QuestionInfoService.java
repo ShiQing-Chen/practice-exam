@@ -100,4 +100,12 @@ public interface QuestionInfoService {
      * @return
      */
     MessageVo getReadyReviewByTeacher(SharedUser sharedUser);
+
+    /**
+     * 学生
+     * 根据试卷ID获取试题
+     * @param paperId
+     * @return
+     */
+    MessageVo studentGetQuesListByPaperId(Long paperId);
 }

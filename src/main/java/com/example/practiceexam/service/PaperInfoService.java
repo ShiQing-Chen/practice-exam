@@ -5,6 +5,7 @@ import com.example.common.vo.MessageVo;
 import com.example.practiceexam.form.AddPaperForm;
 import com.example.practiceexam.form.UpdatePaperForm;
 import com.example.practiceexam.param.SearchPaperParam;
+import com.example.practiceexam.param.StudentSearchPaperParam;
 
 /**
  * @author ShiQing_Chen  2020/3/14  01:28
@@ -61,4 +62,12 @@ public interface PaperInfoService {
      * @return
      */
     MessageVo teacherGetListByPage(SharedUser sharedUser, SearchPaperParam param);
+
+    /**
+     * 学生
+     * 分页查询
+     * @param param
+     * @return
+     */
+    MessageVo studentGetListByPage(SharedUser sharedUser, StudentSearchPaperParam param);
 }
