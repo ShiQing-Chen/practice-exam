@@ -37,10 +37,10 @@ jwt:
 
 # 阿里对象存储
 alioss:
-  endpoint: oss-cn-beijing.aliyuncs.com
-  accessKeyId: LTAI4Fh9ekeoPC5nS2x4mRvN
-  accessKeySecret: b7T1y9S9KsAhMPL4jtlhCNnQyW99gS
-  bucketName: farmeryun
+  endpoint: 
+  accessKeyId: 
+  accessKeySecret: 
+  bucketName: 
 
 
 
